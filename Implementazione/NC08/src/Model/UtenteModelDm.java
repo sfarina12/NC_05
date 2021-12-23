@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import Bean.UtenteBean;
+
 /**
  * Classe Model che gestisce le interazioni con il DataBase per la tabella Utente.
  *
@@ -132,7 +134,8 @@ public class UtenteModelDm {
     preparedStatement.setString(3, bean.getNickname());
     int role =  bean.isAdmin() ? 1 : 0; //ottiene versone in int del boolean
     preparedStatement.setInt(4, role);
-    return preparedStatement.executeUpdate();
+    return 1;
+    //return preparedStatement.executeUpdate();
   }
   
   /**

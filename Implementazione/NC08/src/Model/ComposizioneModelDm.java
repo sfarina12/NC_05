@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import Bean.ComposizioneBean;
+
 /**
  * consente di prendere informazioni dal database riguardo gli oridni.
  *
@@ -19,7 +21,7 @@ public class ComposizioneModelDm {
    *
    * @param bean - l'ordine da salvare
    */
-  public synchronized void doSave(ComposizioneBean bean) throws SQLException {
+  public synchronized int doSave(ComposizioneBean bean) throws SQLException {
     Connection connection = null;
     PreparedStatement preparedStatement = null;
 
@@ -43,8 +45,10 @@ public class ComposizioneModelDm {
         }
       } catch (SQLException e) {
         e.printStackTrace();
+        return 0;
       }
     }
+    return 1;
   }
   
   /**

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="installer"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk-11.0.2">
 		<attributes>
+			<attribute name="module" value="true"/>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
@@ -14,5 +16,16 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/apiguardian-api-1.1.0.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/hamcrest-core-1.1.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mockito-all-1.10.19.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mockito-core-3.6.28.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mssql-jdbc-8.2.2.jre13.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mysql-connector-java-8.0.12.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/objenesis-1.0.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/spring-core-5.2.12.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/spring-test-5.2.12.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/spring-web-4.3.30.RELEASE.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
