@@ -23,13 +23,13 @@ import Model.OrdineModelDm;
 
 class TestClassOrdineModelDM {
 
-	@Test
+  @Test
     void testDoRetrieveAll() throws SQLException {
     System.out.println("Testing :ORDINE: DoRetrieveAll()");
 
-    OrdineModelDm dm=new OrdineModelDm();
+    OrdineModelDm dm = new OrdineModelDm();
     
-    ArrayList<OrdineBean> ordini=dm.doRetrieveAll("dario@dodo.it");
+    ArrayList<OrdineBean> ordini = dm.doRetrieveAll("dario@dodo.it");
     assertNotNull(ordini);
   }
 
@@ -37,11 +37,12 @@ class TestClassOrdineModelDM {
     void testDoSave() throws SQLException {
     System.out.println("Testing :ORDINE: DoSave()");
 
-    OrdineModelDm dm=new OrdineModelDm();
+    OrdineModelDm dm = new OrdineModelDm();
     
-    OrdineBean exampleOrdine = new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it",false,(float)0);
+    OrdineBean exampleOrdine = 
+        new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it", false, (float) 0);
 
-    int i=dm.doSave(exampleOrdine);
+    int i = dm.doSave(exampleOrdine);
 
     dm.doDelete(1);
 
@@ -52,13 +53,14 @@ class TestClassOrdineModelDM {
     void testDoDelete() throws SQLException {
     System.out.println("Testing :ORDINE: DoDelete()");
 
-    OrdineModelDm dm=new OrdineModelDm();
+    OrdineModelDm dm = new OrdineModelDm();
     
-    OrdineBean exampleOrdine = new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it",false,(float)0);
+    OrdineBean exampleOrdine = 
+        new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it", false, (float) 0);
 
     dm.doSave(exampleOrdine);
 
-    boolean i=dm.doDelete(1);
+    boolean i = dm.doDelete(1);
 
     assertEquals(i, false);
   }
@@ -67,21 +69,22 @@ class TestClassOrdineModelDM {
     void testDoRetrieveByKey() throws SQLException {
     System.out.println("Testing :ORDINE: DoRetrieveBeKey");
     
-    OrdineModelDm dm=new OrdineModelDm();
+    OrdineModelDm dm = new OrdineModelDm();
     
-    OrdineBean exampleOrdine = new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it",false,(float)0);
+    OrdineBean exampleOrdine = 
+        new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it", false, (float) 0);
 
     dm.doSave(exampleOrdine);
     
     OrdineBean bean = (OrdineBean) dm.doRetrieveByKey(11);
     OrdineBean expected =
-        new OrdineBean("2017-06-15", 11, "indirizzo", "dario@dodo.it",false,(float)0);
-
-    assertTrue(expected.getData()==null
-        && expected.getIdOrdine()==bean.getIdOrdine()
+        new OrdineBean("2017-06-15", 11, "indirizzo", "dario@dodo.it", false, (float) 0);
+    
+    assertTrue(expected.getData().equals(bean.getData())
+        && expected.getIdOrdine() == bean.getIdOrdine()
         && expected.getIndirizzo().equals(bean.getIndirizzo())
         && expected.getMail().equals(bean.getMail())
-        && expected.getTotale()==bean.getTotale());
+        && expected.getTotale() == bean.getTotale());
     
     dm.doDelete(1);
   }

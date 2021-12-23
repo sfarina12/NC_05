@@ -15,72 +15,71 @@ import Model.ComposizioneModelDm;
 
 class TestClassComposizioneModelDM {
 
-	/**
-	 * Classe Test per OrdineModelDm.java.
-	 *
-	 * @author Farina Simone
-	 *
-	 */
+  /**
+   * Classe Test per OrdineModelDm.java.
+   *
+   * @author Farina Simone
+   *
+   */
 
-		@Test
-	    void testDoRetrieveAll() throws SQLException {
-	    System.out.println("Testing :COMPOSIZIONE: DoRetrieveAll()");
+  @Test
+    void testDoRetrieveAll() throws SQLException {
+    System.out.println("Testing :COMPOSIZIONE: DoRetrieveAll()");
 
-	    ComposizioneModelDm dm=new ComposizioneModelDm();
-	    
-	    ArrayList<ComposizioneBean> ordini=dm.doRetrieveAll(1);
-	    assertNotNull(ordini);
-	  }
+    ComposizioneModelDm dm = new ComposizioneModelDm();
+    
+    ArrayList<ComposizioneBean> ordini = dm.doRetrieveAll(1);
+    assertNotNull(ordini);
+  }
+  
+  @Test
+    void testDoSave() throws SQLException {
+    System.out.println("Testing :COMPOSIZIONE: DoSave()");
 
-	  @Test
-	    void testDoSave() throws SQLException {
-	    System.out.println("Testing :COMPOSIZIONE: DoSave()");
+    ComposizioneModelDm dm = new ComposizioneModelDm();
+    
+    ComposizioneBean exampleOrdine = new ComposizioneBean(11, "9781245562344", 1);
 
-	    ComposizioneModelDm dm=new ComposizioneModelDm();
-	    
-	    ComposizioneBean exampleOrdine = new ComposizioneBean(1,"isbn",1);
+    int i = dm.doSave(exampleOrdine);
 
-	    int i = dm.doSave(exampleOrdine);
+    dm.doDelete(exampleOrdine.getIdOrdine());
 
-	    dm.doDelete(exampleOrdine.getIdOrdine());
+    assertEquals(i, 1);
+  }
 
-	    assertEquals(i, 1);
-	  }
-/*
-	  @Test
-	    void testDoDelete() throws SQLException {
-	    System.out.println("Testing :ORDINE: DoDelete()");
+  @Test
+    void testDoDelete() throws SQLException {
+    System.out.println("Testing :ORDINE: DoDelete()");
 
-	    ComposizioneModelDm dm=new ComposizioneModelDm();
-	    
-	    ComposizioneBean exampleOrdine = new ComposizioneBean(1,"isbn",1);
+    ComposizioneModelDm dm = new ComposizioneModelDm();
+    
+    ComposizioneBean exampleOrdine = new ComposizioneBean(11, "9781245562344", 1);
 
-	    dm.doSave(exampleOrdine);
+    dm.doSave(exampleOrdine);
 
-	    boolean i=dm.doDelete(exampleOrdine.getIdOrdine());
+    boolean i = dm.doDelete(exampleOrdine.getIdOrdine());
 
-	    assertEquals(i, false);
-	  }
-	  
-	  @Test
-	    void testDoRetrieveByKey() throws SQLException {
-	    System.out.println("Testing :COMPOSIZIONE: DoRetrieveBeKey");
-	    
-	    ComposizioneModelDm dm=new ComposizioneModelDm();
-	    
-	    ComposizioneBean exampleOrdine = new ComposizioneBean(1,"isbn",1);
+    assertEquals(i, true);
+  }
 
-	    dm.doSave(exampleOrdine);
-	    
-	    ComposizioneBean bean = (ComposizioneBean) dm.doRetrieveByKey(1);
-	    ComposizioneBean expected =
-	        new ComposizioneBean(1,"isbn",1);
+  @Test
+    void testDoRetrieveByKey() throws SQLException {
+    System.out.println("Testing :COMPOSIZIONE: DoRetrieveBeKey");
+    
+    ComposizioneModelDm dm = new ComposizioneModelDm();
+    
+    ComposizioneBean exampleOrdine = new ComposizioneBean(11, "9781245562344", 1);
 
-	    assertTrue(expected.getIdOrdine()==bean.getIdOrdine()
-	        && expected.getIsbn().equals(bean.getIsbn())
-	        && expected.getQuantita()==bean.getQuantita());
-	    
-	    dm.doDelete(bean.getIdOrdine());
-	  }*/
-	
+    dm.doSave(exampleOrdine);
+    
+    ComposizioneBean bean = (ComposizioneBean) dm.doRetrieveByKey(11);
+    ComposizioneBean expected =
+        new ComposizioneBean(11, "9781245562344", 1);
+
+    assertTrue(expected.getIdOrdine() == bean.getIdOrdine()
+        && expected.getIsbn().equals(bean.getIsbn())
+        && expected.getQuantita() == bean.getQuantita());
+    
+    dm.doDelete(bean.getIdOrdine());
+  }
 }

@@ -74,7 +74,7 @@ public class OrdineModelDm {
 
       while (rs.next()) {
         bean.setIdOrdine(rs.getInt("ID_ORDINE"));
-        bean.setMail(rs.getString("DATA"));
+        bean.setData(rs.getString("DATA"));
         bean.setTotale(rs.getFloat("TOTALE"));
         bean.setMetodoPagamento(rs.getInt("METODO_PAGAMENTO") == 0 ? false : true);
         bean.setIndirizzo(rs.getString("INDIRIZZO"));
@@ -114,7 +114,7 @@ public class OrdineModelDm {
 
       while (rs.next()) {
         bean.setIdOrdine(rs.getInt("ID_ORDINE"));
-        bean.setMail(rs.getString("DATA"));
+        bean.setData(rs.getString("DATA"));
         bean.setTotale(rs.getFloat("TOTALE"));
         bean.setMetodoPagamento(rs.getInt("METODO_PAGAMENTO") == 0 ? false : true);
         bean.setIndirizzo(rs.getString("INDIRIZZO"));
