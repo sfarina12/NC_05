@@ -2,7 +2,6 @@ package Bean;
 
 /**
  * Classe bean che contiene tuttle le informazioni riguardo l'ordine.
- *
  *@author Alfonso Cuomo
  */
 public class OrdineBean {
