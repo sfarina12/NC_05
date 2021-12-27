@@ -1,6 +1,9 @@
 package Model;
 
 import com.mysql.cj.jdbc.Blob;
+
+import Bean.ProdottoBean;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;

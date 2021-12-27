@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import Bean.OrdineBean;
+
 /**
  * Classe Model che gestisce le interazioni con il DataBase per la tabella Ordine.
  *
@@ -19,13 +21,13 @@ public class OrdineModelDm {
    *
    * @param bean - l'ordine da salvare
    */
-  public synchronized void doSave(OrdineBean bean) throws SQLException {
+  public synchronized int doSave(OrdineBean bean) throws SQLException {
     Connection connection = null;
     PreparedStatement preparedStatement = null;
 
     String insertSql = "INSERT INTO " + OrdineModelDm.TABLE_NAME
           + " (DATA, TOTALE, METODO_PAGAMENTO, INDIRIZZO, UTENTE_MAIL)"
-          + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+          + " VALUES (?, ?, ?, ?, ?)";
 
     try {
       connection = new ConnectionSingleton().getInstance().getConnessione();
@@ -45,8 +47,11 @@ public class OrdineModelDm {
         }
       } catch (SQLException e) {
         e.printStackTrace();
+        return 0;
       }
     }
+    
+    return 1;
   }
   
   /**
@@ -69,7 +74,7 @@ public class OrdineModelDm {
 
       while (rs.next()) {
         bean.setIdOrdine(rs.getInt("ID_ORDINE"));
-        bean.setMail(rs.getString("DATA"));
+        bean.setData(rs.getString("DATA"));
         bean.setTotale(rs.getFloat("TOTALE"));
         bean.setMetodoPagamento(rs.getInt("METODO_PAGAMENTO") == 0 ? false : true);
         bean.setIndirizzo(rs.getString("INDIRIZZO"));
@@ -99,7 +104,7 @@ public class OrdineModelDm {
     ArrayList<OrdineBean> ordini = new ArrayList<OrdineBean>();
     
     OrdineBean bean = new OrdineBean();
-    String selectSql = "SELECT * FROM " + OrdineModelDm.TABLE_NAME + " WHERE MAIL = ?";
+    String selectSql = "SELECT * FROM " + OrdineModelDm.TABLE_NAME + " WHERE UTENTE_MAIL = ?";
 
     try {
       connection = new ConnectionSingleton().getInstance().getConnessione();
@@ -109,7 +114,7 @@ public class OrdineModelDm {
 
       while (rs.next()) {
         bean.setIdOrdine(rs.getInt("ID_ORDINE"));
-        bean.setMail(rs.getString("DATA"));
+        bean.setData(rs.getString("DATA"));
         bean.setTotale(rs.getFloat("TOTALE"));
         bean.setMetodoPagamento(rs.getInt("METODO_PAGAMENTO") == 0 ? false : true);
         bean.setIndirizzo(rs.getString("INDIRIZZO"));
