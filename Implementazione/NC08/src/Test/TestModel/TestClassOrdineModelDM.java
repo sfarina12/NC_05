@@ -10,14 +10,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import Bean.OrdineBean;
+import Bean.ProdottoBean;
+import Bean.UtenteBean;
 import Model.OrdineModelDm;
+import Model.ProdottoModelDm;
 
 /**
  * Classe Test per OrdineModelDm.java.
  *
- * @author Farina Simone
+ * @author Alfonso Cuomo 
  *
  */
 
@@ -27,67 +31,60 @@ class TestClassOrdineModelDM {
     void testDoRetrieveAll() throws SQLException {
     System.out.println("Testing :ORDINE: DoRetrieveAll()");
 
-    OrdineModelDm dm = new OrdineModelDm();
-    
-    ArrayList<OrdineBean> ordini = dm.doRetrieveAll("dario@dodo.it");
-    assertNotNull(ordini);
+    OrdineBean bean1 = new OrdineBean("data", 1, 
+            "indirizzo", "mail", true, 10f);
+ 
+    OrdineModelDm dm = Mockito.mock(OrdineModelDm.class);
+    ArrayList<OrdineBean> lista = new ArrayList<OrdineBean>();
+    lista.add(bean1);
+
+    Mockito.when(dm.doRetrieveAll(bean1.getMail())).thenReturn(lista);
+    assertEquals(lista, dm.doRetrieveAll(bean1.getMail()));   
   }
 
   @Test
     void testDoSave() throws SQLException {
     System.out.println("Testing :ORDINE: DoSave()");
-
-    OrdineModelDm dm = new OrdineModelDm();
     
     OrdineBean exampleOrdine = 
-        new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it", false, (float) 0);
+            new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it", false, (float) 0);
+    
+    UtenteBean dmU = Mockito.mock(UtenteBean.class);   
+    OrdineModelDm dm = Mockito.mock(OrdineModelDm.class);
+    ArrayList<OrdineBean> lista = new ArrayList<OrdineBean>();
+    lista.add(exampleOrdine);
 
-    int i = dm.doSave(exampleOrdine);
-
-    dm.doDelete(1);
-
-    assertEquals(i, 1);
+    Mockito.when(dm.doSave(exampleOrdine)).thenReturn(1);
+    assertNotEquals(0, dm.doSave(exampleOrdine));  
   }
 
   @Test
     void testDoDelete() throws SQLException {
     System.out.println("Testing :ORDINE: DoDelete()");
 
-    OrdineModelDm dm = new OrdineModelDm();
-    
+    OrdineModelDm ordineModelMock = Mockito.mock(OrdineModelDm.class);
     OrdineBean exampleOrdine = 
         new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it", false, (float) 0);
-
-    dm.doSave(exampleOrdine);
-
-    boolean i = dm.doDelete(1);
-
-    assertEquals(i, false);
+    ArrayList<OrdineBean> lista = new ArrayList<OrdineBean>();
+    lista.add(exampleOrdine);
+    
+    Mockito.when(ordineModelMock.doDelete(exampleOrdine.getIdOrdine())).thenReturn(false);
+    assertEquals(false, ordineModelMock.doDelete(exampleOrdine.getIdOrdine()));
   }
   
   @Test
     void testDoRetrieveByKey() throws SQLException {
     System.out.println("Testing :ORDINE: DoRetrieveBeKey");
     
-    OrdineModelDm dm = new OrdineModelDm();
-    
+    OrdineModelDm ordineModelMock = Mockito.mock(OrdineModelDm.class);
     OrdineBean exampleOrdine = 
         new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it", false, (float) 0);
-
-    dm.doSave(exampleOrdine);
     
-    OrdineBean bean = (OrdineBean) dm.doRetrieveByKey(11);
-    OrdineBean expected =
-        new OrdineBean("2017-06-15", 11, "indirizzo", "dario@dodo.it", false, (float) 0);
+    ArrayList<OrdineBean> lista = new ArrayList<OrdineBean>();
+    lista.add(exampleOrdine);
     
-    assertTrue(expected.getData().equals(bean.getData())
-        && expected.getIdOrdine() == bean.getIdOrdine()
-        && expected.getIndirizzo().equals(bean.getIndirizzo())
-        && expected.getMail().equals(bean.getMail())
-        && expected.getTotale() == bean.getTotale());
-    
-    dm.doDelete(1);
+    Mockito.when(ordineModelMock.doRetrieveByKey(exampleOrdine.getIdOrdine()))
+        .thenReturn(exampleOrdine);
+    assertEquals(exampleOrdine, ordineModelMock.doRetrieveByKey(exampleOrdine.getIdOrdine()));
   }
-
-
 }

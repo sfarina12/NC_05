@@ -4,11 +4,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import Bean.ProdottoBean;
+import Model.ConnectionSingleton;
 import Model.ProdottoModelDm;
+
+import org.apache.catalina.tribes.util.Arrays;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 /**
  * Classe Test per ProdottoModelDm.java.
@@ -19,76 +27,56 @@ import org.junit.jupiter.api.Test;
 class TestClassProdottoModelDm {
 
   @Test
-    void testDoRetrieveAll() throws SQLException {
+  void testDoRetrieveAll() throws SQLException {
     System.out.println("Testing DoRetrieveAll()");
 
-    Collection<ProdottoBean> products = 
-        (Collection<ProdottoBean>) ProdottoModelDm.doQuery("doRetrieveAll", null);
-    assertNotNull(products);
+    ProdottoBean bean1 = new ProdottoBean("isbn", "titolo", 
+        "autore", 10f, null, "descrizione", "categoria", 10);
+    ProdottoBean bean2 = new ProdottoBean("isbn", "titolo", 
+        "autore", 10f, null, "descrizione", "categoria", 10);	 
+
+    ProdottoModelDm prodottoModelMock = Mockito.mock(ProdottoModelDm.class);
+    ArrayList<ProdottoBean> lista = new ArrayList<ProdottoBean>();
+    lista.add(bean1);
+    lista.add(bean2);
+
+    Mockito.when(prodottoModelMock.doRetrieveAll()).thenReturn(lista);
+    assertEquals(lista, prodottoModelMock.doRetrieveAll());   
+    //System.out.println(lista);
   }
 
   @Test
     void testDoSave() throws SQLException {
     System.out.println("Testing DoSave() di ProdottoModelDm.java");
-
-    byte[] bt;
-    ProdottoBean bean = (ProdottoBean) ProdottoModelDm.doQuery("doRetrieveByKey", "9781245562344");
-    bt = bean.getCopertina();
     
-    ProdottoBean exampleProduct = new ProdottoBean("isbn", "titolo", "autore", 23f, 
-        bt, "descrizione", "categoria", 50);
-
-    int i = (int) ProdottoModelDm.doQuery("doSave", exampleProduct);
-
-    ProdottoModelDm.doQuery("doDelete", exampleProduct.getIsbn());
-
-    assertEquals(i, 1);
+    ProdottoBean bean1 = new ProdottoBean("isbn", "titolo", 
+        "autore", 10f, null, "descrizione", "categoria", 10);
+    ProdottoModelDm prodottoModelMock = Mockito.mock(ProdottoModelDm.class);
+    
+    Mockito.when(prodottoModelMock.doSave(bean1)).thenReturn(1);
+    assertEquals(1, prodottoModelMock.doSave(bean1));   
   }
 
   @Test
     void testDoDelete() throws SQLException {
     System.out.println("Testing DoDelete() di ProdottoModelDm.java");
 
-    byte[] bt;
-    ProdottoBean bean = (ProdottoBean) ProdottoModelDm.doQuery("doRetrieveByKey", "9781245562344");
-    bt = bean.getCopertina();
-    
-    ProdottoBean exampleProduct = new ProdottoBean("isbn", "titolo", "autore", 23f, 
-        bt, "descrizione", "categoria", 50);
+    ProdottoBean bean1 = new ProdottoBean("isbn", "titolo", 
+        "autore", 10f, null, "descrizione", "categoria", 10);
+    ProdottoModelDm prodottoModelMock = Mockito.mock(ProdottoModelDm.class);
 
-    boolean i = (boolean)  ProdottoModelDm.doQuery("doDelete", exampleProduct.getIsbn());
-
-    assertTrue(i);
+    Mockito.when(prodottoModelMock.doDelete(bean1.getIsbn())).thenReturn(true);
+    assertTrue(prodottoModelMock.doDelete(bean1.getIsbn()));  
   }
 
   @Test
     void testDoRetrieveByKey() throws SQLException {
     System.out.println("Testing DoRetrieveBeKey");
-    ProdottoBean bean = (ProdottoBean) ProdottoModelDm.doQuery("doRetrieveByKey", "9781245562344");
-    ProdottoBean expected =
-        new ProdottoBean("9781245562344", "Alla ricerca del tempo perduto",
-          "Marcel Proust", 30f, null, "Lorem ipsum dolor sit amet,"
-          + " consectetur adipiscing elit, sed do eiusmod "
-          + "tempor incididunt ut labore et dolore magna aliqua."
-          + " Ut enim ad minim veniam, quis nostrud exercitation "
-          + "ullamco laboris nisi ut aliquip ex ea"
-          + " commodo consequat.", "Narrativa straniera", 4);
-    
-    assertTrue(expected.getIsbn().equals(bean.getIsbn())
-        && expected.getTitolo().equals(bean.getTitolo())
-        && expected.getAutore().equals(bean.getAutore())
-        && expected.getPrezzo() == bean.getPrezzo()
-        && expected.getDescrizione().equals(bean.getDescrizione())
-        && expected.getQuantitaStock() == bean.getQuantitaStock()
-        && expected.getNomeCategoria().equals(bean.getNomeCategoria()));
-  }
-  
-  @Test
-    void testUpdateCopertina() throws SQLException {
-    System.out.println("Testing testUpdateCopertina..");
-   /* byte[] bt;
-    ProdottoBean bean = (ProdottoBean) ProdottoModelDm.doQuery("doRetrieveByKey", "9781245562344");
-    bt = bean.getCopertina();*/
+    ProdottoBean bean1 = new ProdottoBean("isbn", "titolo", 
+        "autore", 10f, null, "descrizione", "categoria", 10);
+    ProdottoModelDm prodottoModelMock = Mockito.mock(ProdottoModelDm.class);
 
+    Mockito.when(prodottoModelMock.doRetrieveByKey(bean1.getIsbn())).thenReturn(bean1);
+    assertEquals(bean1, prodottoModelMock.doRetrieveByKey(bean1.getIsbn()));  
   }
 }

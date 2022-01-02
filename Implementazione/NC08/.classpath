@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="installer"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk-11.0.2">
+	<classpathentry kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="installer">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
 		<attributes>
 			<attribute name="module" value="true"/>
-			<attribute name="owner.project.facets" value="java"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v9.0">
@@ -16,29 +25,11 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/apiguardian-api-1.1.0.jar"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/hamcrest-core-1.1.jar"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mockito-all-1.10.19.jar"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mockito-core-3.6.28.jar"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mssql-jdbc-8.2.2.jre13.jar"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mysql-connector-java-8.0.12.jar"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/objenesis-1.0.jar"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/spring-core-5.2.12.RELEASE.jar"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/spring-test-5.2.12.RELEASE.jar"/>
-	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/spring-web-4.3.30.RELEASE.jar"/>
-	<classpathentry kind="lib" path="C:/Users/FonsYs/Desktop/hamcrest-core-1.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/FonsYs/Desktop/junit-4.13.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/FonsYs/.m2/repository/org/mockito/mockito-core/3.7.7/mockito-core-3.7.7.jar" sourcepath="C:/Users/FonsYs/.m2/repository/org/mockito/mockito-core/3.7.7/mockito-core-3.7.7-sources.jar">
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="test" value="true"/>
-			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
-			<attribute name="maven.groupId" value="org.mockito"/>
-			<attribute name="maven.artifactId" value="mockito-core"/>
-			<attribute name="maven.version" value="3.7.7"/>
-			<attribute name="maven.scope" value="test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path="build/classes"/>
+	<classpathentry kind="lib" path="C:/Users/FonsYs/Desktop/Ingegneria Del Software/mockito-core-4.2.0.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

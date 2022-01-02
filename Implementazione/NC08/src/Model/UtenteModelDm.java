@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,11 +17,10 @@ public class UtenteModelDm {
 
   private static final String doSave = "doSave";
   private static final String doRetrieveByKey = "doRetrieveByKey";
-  private static final String doCheckLogin = "doCheckLogin";
   private static final String doDelete = "doDelete";
-  
+  private static final String doCheckLogin = "doCheckLogin";
   private static final String TABLE_NAME = "utente";
-  private static PreparedStatement preparedStatement = null;
+  private  PreparedStatement preparedStatement;
 
   /**
    * Metodo per effettuare query.
@@ -30,7 +30,7 @@ public class UtenteModelDm {
    * @return un <b>object</b>
    * @throws SQLException eccezione
    */
-  public static synchronized Object doQuery(String methodName, Object parameter)
+  public synchronized Object doQuery(String methodName, Object parameter)
       throws SQLException {
     Connection connection = null;
     preparedStatement = null;
@@ -59,55 +59,46 @@ public class UtenteModelDm {
           querySql = "DELETE FROM " + UtenteModelDm.TABLE_NAME + " WHERE MAIL = ?";
           preparedStatement = connection.prepareStatement(querySql);
           return doDelete((String) parameter);
+          
         default:
           return null;
       }
-    } finally {
+      
+      /*} finally {
       try {
         if (preparedStatement != null) {
           preparedStatement.close();
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
+        }*/
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
+    return null;
   }
+  //}
 
   /**
-   * Metodo che permette di cancellare un utente dal sito.
-   *  
-   * @param preparedStatement
-   * @param parameter
-   * @return
+   * Metodo per effettuare query per le immagini.
+   *
+   * @param methodName nome della <b>query</b>
+   * @param parameter1  <b>parametro</b> passato alla query
+   * @param parameter2 <b>parametro</b> passato alla query
+   * @return un <b>object</b>
+   * @throws SQLException
    */
-  public synchronized static boolean doDelete(String email)
-     throws SQLException {
-
-	  preparedStatement.setString(1, email);
-	  
-	    return (preparedStatement.executeUpdate() != 0);	  
-}
-
-/**
- *   
- * @param methodName
- * @param parameter1
- * @param parameter2
- * @return
- * @throws SQLException eccezione
- */
-  public static synchronized Object doQuery(String methodName, Object parameter1, Object parameter2)
-      throws SQLException {
+  public synchronized Object doQuery(
+      Connection conn, Object parameter1, Object parameter2)
+      throws SQLException, IOException {
     Connection connection = null;
     preparedStatement = null;
     String querySql;
-
     try {
       new ConnectionSingleton();
       connection = ConnectionSingleton.getInstance().getConnessione();
-      querySql = "SELECT * FROM " + UtenteModelDm.TABLE_NAME + " WHERE MAIL= ? AND PASSWORD= ?";
+      querySql = "INSERT INTO " + UtenteModelDm.TABLE_NAME
+            + " (MAIL, PASSWORD, NICKNAME, IS_ADMIN) VALUES" 
+            + " (?, ?, ?, ?)";
       preparedStatement = connection.prepareStatement(querySql);
-      return doCheckLogin((String) parameter1, (String) parameter2);
+      return doCheckLogin(connection, (String) parameter1, (String) parameter2);
     } finally {
       try {
         if (preparedStatement != null) {
@@ -118,6 +109,31 @@ public class UtenteModelDm {
       }
     }
   }
+  /**
+   * Metodo che permette di cancellare un utente dal sito.
+   *  
+   * @param email <b>parametro</b> passato alla query
+   * @return un <b>boolean</b> true in caso di riuscita
+   * @throws SQLException 
+   */
+  public synchronized  boolean doDelete(String email)
+      throws SQLException {
+
+    //-------------------------------------------------------------------------
+    Connection connection = null;
+    preparedStatement = null;
+
+    new ConnectionSingleton();
+    connection = ConnectionSingleton.getInstance().getConnessione();
+
+    String querySql = "DELETE FROM " + UtenteModelDm.TABLE_NAME + " WHERE MAIL = ?";
+    preparedStatement = connection.prepareStatement(querySql);
+    //-------------------------------------------------------------------------
+
+    preparedStatement.setString(1, email);
+    return (preparedStatement.executeUpdate() != 0);
+  }
+
   
 /**
  * 
@@ -126,8 +142,21 @@ public class UtenteModelDm {
  * @return
  * @throws SQLException
  */
-  public synchronized static int doSave(UtenteBean bean)
-    throws SQLException {
+  public synchronized int doSave(UtenteBean bean)
+      throws SQLException {
+
+    //-------------------------------------------------------------------------
+    Connection connection = null;
+    preparedStatement = null;
+
+    new ConnectionSingleton();
+    connection = ConnectionSingleton.getInstance().getConnessione();
+
+    String querySql = "INSERT INTO " + UtenteModelDm.TABLE_NAME
+            + " (MAIL, PASSWORD, NICKNAME, IS_ADMIN) VALUES"
+            + " (?, ?, ?, ?)";
+    preparedStatement = connection.prepareStatement(querySql);
+    //-------------------------------------------------------------------------
 
     preparedStatement.setString(1, bean.getMail());
     preparedStatement.setString(2, bean.getPassword());
@@ -142,10 +171,22 @@ public class UtenteModelDm {
    * Medoto che restituisce i dati di un utente avente una certa mail in input.
    *
    * @param mail mail dell'utente
-   */
-  public synchronized static UtenteBean doRetrieveByKey( String mail)
-    throws SQLException {
+   */ 
+  public synchronized UtenteBean doRetrieveByKey(String mail)
+      throws SQLException {
 
+    //-------------------------------------------------------------------------
+    Connection connection = null;
+    preparedStatement = null;
+
+    new ConnectionSingleton();
+    connection = ConnectionSingleton.getInstance().getConnessione();
+
+    String querySql = "INSERT INTO " + UtenteModelDm.TABLE_NAME
+        + " (MAIL, PASSWORD, NICKNAME, IS_ADMIN) VALUES"
+        + " (?, ?, ?, ?)";
+    preparedStatement = connection.prepareStatement(querySql);
+    //------------------------------------------------------------------------
     preparedStatement.setString(1, mail);
     ResultSet rs = preparedStatement.executeQuery();
     UtenteBean bean = new UtenteBean();
@@ -163,9 +204,21 @@ public class UtenteModelDm {
    * Medoto che ceontrolla se esistono utenti con qulla password o mail.
    *
    */
-  public synchronized static UtenteBean doCheckLogin(
+  public synchronized UtenteBean doCheckLogin(Connection conn,
       String email, String password) throws SQLException {
 
+    //-------------------------------------------------------------------------
+    Connection connection = null;
+    preparedStatement = null;
+
+    new ConnectionSingleton();
+    connection = ConnectionSingleton.getInstance().getConnessione();
+
+    String querySql = "INSERT INTO " + UtenteModelDm.TABLE_NAME
+        + " (MAIL, PASSWORD, NICKNAME, IS_ADMIN) VALUES"
+        + " (?, ?, ?, ?)";
+    preparedStatement = connection.prepareStatement(querySql);
+    //------------------------------------------------------------------------
     preparedStatement.setString(1, email);
     preparedStatement.setString(2, password);
 
