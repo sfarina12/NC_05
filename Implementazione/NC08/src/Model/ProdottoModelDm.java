@@ -45,7 +45,7 @@ public class ProdottoModelDm {
    * @return un <b>object</b>
    * @throws SQLException
    */
-  public static synchronized Object doQuery(String methodName, Object parameter)
+  public synchronized Object doQuery(String methodName, Object parameter)
       throws SQLException {
 
     Connection connection = null;
@@ -98,7 +98,7 @@ public class ProdottoModelDm {
     }
   }
   
-  public static synchronized Object doQuery(
+  public synchronized Object doQuery(
       String methodName, Object parameter1, Object parameter2)
       throws SQLException, IOException {
     Connection connection = null;
@@ -128,10 +128,22 @@ public class ProdottoModelDm {
    * @return una lista di prodotti
    * @throws SQLException eccezione 
    */
-  public synchronized static Collection<ProdottoBean> doRetrieveAll()
+  public synchronized Collection<ProdottoBean> doRetrieveAll()
       throws SQLException {
 
     Collection<ProdottoBean> products = new LinkedList<ProdottoBean>();
+    
+    //-------------------------------------------------------------------------
+    Connection connection = null;
+    preparedStatement = null;
+    
+    new ConnectionSingleton();
+    connection = ConnectionSingleton.getInstance().getConnessione();
+    
+    String querySql = "SELECT * FROM " + TABLE_NAME;
+    preparedStatement = connection.prepareStatement(querySql);
+    //-------------------------------------------------------------------------
+    
     ResultSet rs = preparedStatement.executeQuery();
 
     while (rs.next()) {
@@ -264,6 +276,8 @@ public class ProdottoModelDm {
     return 0;
   }
   
-  private static void jout(Object obj) {System.out.println(obj);}
+  private static void jout(Object obj) { 
+    System.out.println(obj);
+  }
 }
 
