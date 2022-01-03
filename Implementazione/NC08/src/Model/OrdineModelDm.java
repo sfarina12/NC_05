@@ -26,17 +26,18 @@ public class OrdineModelDm {
     PreparedStatement preparedStatement = null;
 
     String insertSql = "INSERT INTO " + OrdineModelDm.TABLE_NAME
-          + " (DATA, TOTALE, METODO_PAGAMENTO, INDIRIZZO, UTENTE_MAIL)"
-          + " VALUES (?, ?, ?, ?, ?)";
+          + " (ID_ORDINE, DATA , TOTALE, METODO_PAGAMENTO, INDIRIZZO, UTENTE_MAIL)"
+          + " VALUES (?, ?, ?, ?, ?, ?)";
 
     try {
       connection = new ConnectionSingleton().getInstance().getConnessione();
       preparedStatement = connection.prepareStatement(insertSql);
-      preparedStatement.setString(1, bean.getData());
-      preparedStatement.setFloat(2, bean.getTotale());
-      preparedStatement.setInt(3, bean.isMetodoPagamento() ? 1 : 0);
-      preparedStatement.setString(4, bean.getIndirizzo());
-      preparedStatement.setString(5, bean.getMail());
+      preparedStatement.setInt(1, bean.getIdOrdine());
+      preparedStatement.setString(2, bean.getData());
+      preparedStatement.setFloat(3, bean.getTotale());
+      preparedStatement.setInt(4, bean.isMetodoPagamento() ? 1 : 0);
+      preparedStatement.setString(5, bean.getIndirizzo());
+      preparedStatement.setString(6, bean.getMail());
       preparedStatement.executeUpdate();
 
       connection.commit();

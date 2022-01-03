@@ -22,11 +22,6 @@ import java.util.LinkedList;
  *@author Simone Farina
  */
 public class ProdottoModelDm {
-  public  static final String doRetrieveAll = "doRetrieveAll";
-  public  static final String doSave = "doSave";
-  public  static final String doRetrieveByKey = "doRetrieveByKey";
-  public  static final String doDelete = "doDelete";
-  public  static final String updateCopertina = "updateCopertina";
   
   private final static String TABLE_NAME = "prodotto";
   private  PreparedStatement preparedStatement;
@@ -35,102 +30,6 @@ public class ProdottoModelDm {
   public ProdottoModelDm() {}
   
   public ProdottoModelDm(ConnectionSingleton singleton) {}
-
-
-  /**
-   * Metodo per effettuare query.
-   *
-   * @param methodName nome della <b>query</b>
-   * @param parameter  <b>parametro</b> passato alla query
-   * @return un <b>object</b>
-   * @throws SQLException
-   */
-  public  synchronized Object doQuery(String methodName, Object parameter)
-      throws SQLException {
-
-    Connection connection = null;
-    preparedStatement = null;
-    String querySql;
-
-    try {
-
-      new ConnectionSingleton();
-      connection = ConnectionSingleton.getInstance().getConnessione();
-
-      switch (methodName) {
-
-        case doRetrieveAll:
-          querySql = "SELECT * FROM " + TABLE_NAME;
-          preparedStatement = connection.prepareStatement(querySql);
-          return doRetrieveAll();
-
-        case doSave:
-          querySql = "INSERT INTO " + ProdottoModelDm.TABLE_NAME
-            + " (ISBN, TITOLO, AUTORE, PREZZO, COPERTINA, DESCRIZIONE,"
-            + " NOME_CATEGORIA, QUANTITA_STOCK) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-          preparedStatement = connection.prepareStatement(querySql);
-          return doSave((ProdottoBean) parameter);
-
-        case doRetrieveByKey:
-          querySql = "SELECT * FROM " + ProdottoModelDm.TABLE_NAME + " WHERE isbn = ?";
-          preparedStatement = connection.prepareStatement(querySql);
-          return doRetrieveByKey((String) parameter);
-         
-        case doDelete:
-          querySql = "DELETE FROM " + ProdottoModelDm.TABLE_NAME + " WHERE ISBN = ?";
-          preparedStatement = connection.prepareStatement(querySql);
-          return doDelete((String) parameter);
-        default:
-          return null;
-
-      }
-      /*
-    } finally {
-
-      try {
-        if (preparedStatement != null) {
-          preparedStatement.close();
-          System.out.println("bla bla");
-        }*/
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-  //}
-  
-  /**
-   * Metodo per effettuare query per le immagini.
-   *
-   * @param methodName nome della <b>query</b>
-   * @param parameter1  <b>parametro</b> passato alla query
-   * @param parameter2 <b>parametro</b> passato alla query
-   * @return un <b>object</b>
-   * @throws SQLException
-   */
-  public synchronized Object doQuery(
-      String methodName, Object parameter1, Object parameter2)
-      throws SQLException, IOException {
-    Connection connection = null;
-    preparedStatement = null;
-    String querySql;
-    try {
-      new ConnectionSingleton();
-      connection = ConnectionSingleton.getInstance().getConnessione();
-      querySql = "UPDATE PRODOTTO SET COPERTINA = ? WHERE ISBN = ?";
-      preparedStatement = connection.prepareStatement(querySql);
-      return updateCopertina(connection, (String) parameter1, (String) parameter2);
-    } finally {
-      try {
-        if (preparedStatement != null) {
-          preparedStatement.close();
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-  }
   
   /**
    * Query che effettua una ricerca di tutti i prodotti presenti nel database.
@@ -142,37 +41,42 @@ public class ProdottoModelDm {
   public synchronized  Collection<ProdottoBean> doRetrieveAll()
       throws SQLException {
 
-    Collection<ProdottoBean> products = new LinkedList<ProdottoBean>();
-    //-------------------------------------------------------------------------
     Connection connection = null;
-    preparedStatement = null;
-
-    new ConnectionSingleton();
-    connection = ConnectionSingleton.getInstance().getConnessione();
-
+    PreparedStatement preparedStatement = null;
     String querySql = "SELECT * FROM " + TABLE_NAME;
-    preparedStatement = connection.prepareStatement(querySql);
-    //-------------------------------------------------------------------------
+    Collection<ProdottoBean> products = new LinkedList<ProdottoBean>();
+    
+    try {
+      connection = new ConnectionSingleton().getInstance().getConnessione();
+      preparedStatement = connection.prepareStatement(querySql);
 
-    ResultSet rs = preparedStatement.executeQuery();
+      ResultSet rs = preparedStatement.executeQuery();
 
-    while (rs.next()) {
-      ProdottoBean bean = new ProdottoBean();
+      while (rs.next()) {
+        ProdottoBean bean = new ProdottoBean();
 
-      bean.setIsbn(rs.getString("ISBN"));
-      bean.setTitolo(rs.getString("TITOLO"));
-      bean.setAutore(rs.getString("AUTORE"));
-      bean.setPrezzo(rs.getFloat("PREZZO"));
-      Blob imgBlob = (Blob) rs.getBlob("COPERTINA");
-      if (imgBlob != null) {
-        bean.setCopertina(imgBlob.getBytes(1, (int) imgBlob.length()));
+        bean.setIsbn(rs.getString("ISBN"));
+        bean.setTitolo(rs.getString("TITOLO"));
+        bean.setAutore(rs.getString("AUTORE"));
+        bean.setPrezzo(rs.getFloat("PREZZO"));
+        Blob imgBlob = (Blob) rs.getBlob("COPERTINA");
+        if (imgBlob != null) {
+          bean.setCopertina(imgBlob.getBytes(1, (int) imgBlob.length()));
+        }
+        bean.setDescrizione(rs.getString("DESCRIZIONE"));
+        bean.setNomeCategoria(rs.getString("NOME_CATEGORIA")); 
+        bean.setQuantitaStock(rs.getInt("QUANTITA_STOCK"));
+        products.add(bean);
       }
-      bean.setDescrizione(rs.getString("DESCRIZIONE"));
-      bean.setNomeCategoria(rs.getString("NOME_CATEGORIA")); 
-      bean.setQuantitaStock(rs.getInt("QUANTITA_STOCK"));
-      products.add(bean);
+    } finally {
+      try {
+        if (preparedStatement != null) {
+          preparedStatement.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
-
     return products;
   }
 
@@ -193,7 +97,7 @@ public class ProdottoModelDm {
 
     try {
       new ConnectionSingleton();
-	connection = ConnectionSingleton.getInstance().getConnessione();
+	  connection = ConnectionSingleton.getInstance().getConnessione();
       preparedStatement = connection.prepareStatement(insertSql);
       preparedStatement.setString(1, product.getIsbn());
       preparedStatement.setString(2, product.getTitolo());
@@ -226,38 +130,44 @@ public class ProdottoModelDm {
   * @param isbn ISBN identificativo del libro.
   * @return ProdottoBean
   */
-  public synchronized ProdottoBean doRetrieveByKey(
+  public synchronized ProdottoBean doRetrieveByKey( 
       String isbn) throws SQLException {
 
-    //-------------------------------------------------------------------------
     Connection connection = null;
-    preparedStatement = null;
-
-    new ConnectionSingleton();
-    connection = ConnectionSingleton.getInstance().getConnessione();
-
-    String querySql = "SELECT FROM " + ProdottoModelDm.TABLE_NAME + " WHERE ISBN = ?";
-    preparedStatement = connection.prepareStatement(querySql);
-     //-------------------------------------------------------------------------
-
-    preparedStatement.setString(1, isbn);
-
-    ResultSet rs = preparedStatement.executeQuery();
+    PreparedStatement preparedStatement = null;
+    String querySql = "SELECT * FROM " + ProdottoModelDm.TABLE_NAME + " WHERE ISBN = ?";
+    
     ProdottoBean bean = new ProdottoBean();
-    while (rs.next()) {
-      bean.setIsbn(rs.getString("ISBN"));
-      bean.setTitolo(rs.getString("TITOLO"));
-      bean.setAutore(rs.getString("AUTORE"));
-      bean.setPrezzo(rs.getFloat("PREZZO"));
-      Blob imgBlob = (Blob) rs.getBlob("COPERTINA");
-      bean.setCopertina(imgBlob.getBytes(1, (int) imgBlob.length()));
-      bean.setDescrizione(rs.getString("DESCRIZIONE"));
-      bean.setNomeCategoria(rs.getString("NOME_CATEGORIA"));
-      bean.setQuantitaStock(rs.getInt("QUANTITA_STOCK"));
+    
+    try {
+      connection = new ConnectionSingleton().getInstance().getConnessione();
+      preparedStatement = connection.prepareStatement(querySql);
+      preparedStatement.setString(1, isbn);
+      ResultSet rs = preparedStatement.executeQuery();
+
+      while (rs.next()) {
+        bean.setIsbn(rs.getString("ISBN"));
+        bean.setTitolo(rs.getString("TITOLO"));
+        bean.setAutore(rs.getString("AUTORE"));
+        bean.setPrezzo(rs.getFloat("PREZZO"));
+        Blob imgBlob = (Blob) rs.getBlob("COPERTINA");
+        bean.setCopertina(imgBlob.getBytes(1, (int) imgBlob.length()));
+        bean.setDescrizione(rs.getString("DESCRIZIONE"));
+        bean.setNomeCategoria(rs.getString("NOME_CATEGORIA"));
+        bean.setQuantitaStock(rs.getInt("QUANTITA_STOCK"));
+      }
+    } finally {
+      try {
+        if (preparedStatement != null) {
+          preparedStatement.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
     return bean;
   }
-
+    
   /**
   * Il metodo permette di cancellare un libro dal DB.
   *
@@ -267,20 +177,32 @@ public class ProdottoModelDm {
   public synchronized boolean doDelete(
       String isbn) throws SQLException {
 
-    //-------------------------------------------------------------------------
     Connection connection = null;
-    preparedStatement = null;
-
-    new ConnectionSingleton();
-    connection = ConnectionSingleton.getInstance().getConnessione();
-
+    PreparedStatement preparedStatement = null;
     String querySql = "DELETE FROM " + ProdottoModelDm.TABLE_NAME + " WHERE ISBN = ?";
-    preparedStatement = connection.prepareStatement(querySql);
-     //-------------------------------------------------------------------------
-     preparedStatement.setString(1, isbn);
+    
+    int result;
+    
+    try {
+      connection = new ConnectionSingleton().getInstance().getConnessione();
+      preparedStatement = connection.prepareStatement(querySql);
+      preparedStatement.setString(1, isbn);
  
-    return (preparedStatement.executeUpdate() != 0);
+      result = preparedStatement.executeUpdate();
+      connection.commit();
+
+    } finally {
+      try {
+        if (preparedStatement != null) {
+          preparedStatement.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return (result != 0);
   }
+
 
   /**
   * Il metodo permette di caricare la copertina relativa a un libro nel database.
@@ -290,24 +212,34 @@ public class ProdottoModelDm {
   * @return 
   * @throws IOException, SQLException eccezzione 
   */
-  public synchronized int updateCopertina(
-      Connection con, String isbn, String photo) throws SQLException, IOException {
+  // String photo = "\\WebContent\\WEB-INF\\copertine\\ + nome.jpg"
+  public synchronized int updateCopertina(String isbn, String photo) 
+        throws SQLException, IOException {
 
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    String querySql = "UPDATE PRODOTTO SET COPERTINA = ? WHERE ISBN = ?"; 
+    
     File file = new File(photo);
+    
     try {
+      connection = new ConnectionSingleton().getInstance().getConnessione();
+      preparedStatement = connection.prepareStatement(querySql);
       FileInputStream fis = new FileInputStream(file);
       preparedStatement.setBinaryStream(1, fis, fis.available());
       preparedStatement.setString(2, isbn);
-      
       preparedStatement.executeUpdate();
-      con.commit();
+      connection.commit();
       return 1;  
-    } catch (SQLException sqlException) {
-      System.out.println(sqlException);
     }
-    return 0;
+    finally {
+      try {
+        if (preparedStatement != null) {
+          preparedStatement.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
   }
-  
-private static void jout(Object obj) {System.out.println(obj);}
 }
-

@@ -88,45 +88,7 @@ public class ComposizioneModelDm {
     return bean;
   }
   
-  /**
-   * Quando invocato, recupererà tutte le composizioni legate ad un ordine dal database.
-   *
-   * @param idOrdine - id dell'ordine da recuparare
-   */
-  public synchronized ArrayList<ComposizioneBean> doRetrieveAll(int idOrdine) throws SQLException {
-    Connection connection = null;
-    PreparedStatement preparedStatement = null;
-    ArrayList<ComposizioneBean> ordini = new ArrayList<ComposizioneBean>();
-    
-    ComposizioneBean bean = new ComposizioneBean();
-    String selectSql = "SELECT * FROM " + ComposizioneModelDm.TABLE_NAME
-        + " WHERE ORDINE_ID_ORDINE = ?";
-
-    try {
-      connection = new ConnectionSingleton().getInstance().getConnessione();
-      preparedStatement = connection.prepareStatement(selectSql);
-      preparedStatement.setInt(1, idOrdine);
-      ResultSet rs = preparedStatement.executeQuery();
-
-      while (rs.next()) {
-        bean.setIdOrdine(rs.getInt("ORDINE_ID_ORDINE"));
-        bean.setIsbn(rs.getString("PRODOTTO_ISBN"));
-        bean.setQuantita(rs.getInt("QUANTITA"));
-        
-        ordini.add(bean);
-      }
-
-    } finally {
-      try {
-        if (preparedStatement != null) {
-          preparedStatement.close();
-        }
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-    return ordini;
-  }
+  
   
   /**
    * Quando invocato, rimuoverà ua determinata composizione dal database.
@@ -160,4 +122,45 @@ public class ComposizioneModelDm {
     }
     return (result != 0);
   }
+  
+  /**
+   * Quando invocato, recupererà tutte le composizioni legate ad un ordine dal database.
+   *
+   * @param idOrdine - id dell'ordine da recuparare
+   */
+  /*
+  public synchronized ArrayList<ComposizioneBean> doRetrieveAll(int idOrdine) throws SQLException {
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    ArrayList<ComposizioneBean> ordini = new ArrayList<ComposizioneBean>();
+    
+    ComposizioneBean bean = new ComposizioneBean();
+    String selectSql = "SELECT * FROM " + ComposizioneModelDm.TABLE_NAME
+        + " WHERE ORDINE_ID_ORDINE = ?";
+
+    try {
+      connection = new ConnectionSingleton().getInstance().getConnessione();
+      preparedStatement = connection.prepareStatement(selectSql);
+      preparedStatement.setInt(1, idOrdine);
+      ResultSet rs = preparedStatement.executeQuery();
+
+      while (rs.next()) {
+        bean.setIdOrdine(rs.getInt("ORDINE_ID_ORDINE"));
+        bean.setIsbn(rs.getString("PRODOTTO_ISBN"));
+        bean.setQuantita(rs.getInt("QUANTITA"));
+        
+        ordini.add(bean);
+      }
+
+    } finally {
+      try {
+        if (preparedStatement != null) {
+          preparedStatement.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return ordini;
+  }*/
 }

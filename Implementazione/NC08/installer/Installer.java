@@ -60,9 +60,9 @@ public class Installer {
     List<ProdottoBean> prodotti;
     
     try {
-      prodotti = (List<ProdottoBean>) model.doQuery("doRetrieveAll", null);
+      prodotti = (List<ProdottoBean>) model.doRetrieveAll();
       for (int i = 0; i < prodotti.size(); i++) {
-        model.doQuery("updateCopertina", prodotti.get(i).getIsbn(),
+        model.updateCopertina(prodotti.get(i).getIsbn(),
             ".\\WebContent\\WEB-INF\\copertine\\" + prodotti.get(i).getIsbn() + ".jpg");
       }
     } catch (SQLException e) {
