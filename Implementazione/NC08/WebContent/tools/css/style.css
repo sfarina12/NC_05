@@ -1,0 +1,36 @@
+:root {
+  --yellow: #FFB900;
+  --white: #ffffff;
+  --pink: #ff03d0;
+  --green: #03ffa7;
+}
+
+h1,h2,h3{
+	color: var(--yellow);
+}
+
+.nav-link{
+	color: var(--yellow);
+}
+
+.nav-link:hover {
+	color: var(--green);
+}
+
+a{
+	color: var(--yellow);
+}
+
+a:hover {
+	color: var(--green);
+}
+
+.centered{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#paragrafo-home{
+	text-align:center;
+}
