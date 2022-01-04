@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="control.*, model.*,java.net.*,java.text.*, java.util.*, java.sql.SQLException"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" import="Control.*, Model.*, Bean.*,java.net.*,java.text.*, java.util.*, java.sql.SQLException"
     pageEncoding="ISO-8859-1"%>
 <%
   if ((request.getAttribute("libri")==null) || (request.getAttribute("categorie") == null)){

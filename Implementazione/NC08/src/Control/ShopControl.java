@@ -46,7 +46,7 @@ public class ShopControl extends HttpServlet {
     categorie = new HashSet<>();
     try {
       prodotti = new ArrayList<>(
-        (LinkedList<ProdottoBean>) prodottoModelDm.doQuery("doRetrieveAll", null));
+        (LinkedList<ProdottoBean>) prodottoModelDm.doRetrieveAll());
       for (ProdottoBean p : prodotti) {
         categorie.add(p.getNomeCategoria());
       }

@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Farina Simone
  */
-@WebServlet("/AcquistoControl")
+@WebServlet("/ComposizioneControl")
 public class ComposizioneControl extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private final ComposizioneModelDm composizioneModelDm = new ComposizioneModelDm();

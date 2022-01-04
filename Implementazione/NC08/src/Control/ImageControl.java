@@ -33,7 +33,7 @@ public class ImageControl extends HttpServlet {
       byte[] bt;
 
       try {        
-        ProdottoBean pb = (ProdottoBean) prodottoModelDm.doQuery("doRetrieveByKey", id);
+        ProdottoBean pb = (ProdottoBean) prodottoModelDm.doRetrieveByKey(id);
         bt = pb.getCopertina();
         
         ServletOutputStream out = response.getOutputStream();

@@ -94,7 +94,7 @@ public class UtenteControl extends HttpServlet {
           user.setPassword((String) request.getAttribute("usrPass"));
           user.setAdmin(false);
 
-          model.doQuery("doSave", user);
+          model.doSave(user);
 
           redirectedPage = "/Login.jsp";
         }
@@ -112,7 +112,7 @@ public class UtenteControl extends HttpServlet {
    */
   private int checkLogin(String mail, String password) throws Exception {
     
-    UtenteBean usr = (UtenteBean) model.doQuery("doCheckLogin", mail, password);
+    UtenteBean usr = (UtenteBean) model.doCheckLogin(mail, password);
 
     try {
       if (usr != null) {

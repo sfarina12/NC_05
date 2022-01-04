@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/AdminControl")
 public class AdminControl extends HttpServlet {
   private static final long serialVersionUID = 1L;
-       
+  private final ProdottoModelDm prodottoModelDm = new ProdottoModelDm();
   public AdminControl() {
     super();
   }
@@ -28,7 +28,7 @@ public class AdminControl extends HttpServlet {
     try {
       if (action.equals("delete")) {
         String isbn = (String) request.getAttribute("isbn");
-        ProdottoModelDm.doQuery("doDelete", isbn);
+        prodottoModelDm.doDelete(isbn);
         response.sendRedirect(request.getContextPath() + "/ShopControl");
       } else if (action.equals("add")) {
         String isbn = (String) request.getAttribute("isbn");
@@ -49,7 +49,7 @@ public class AdminControl extends HttpServlet {
         bean.setPrezzo(prezzo);
         bean.setQuantitaStock(quantitaStock);
         bean.setCopertina(file);
-        ProdottoModelDm.doQuery("doSave", bean);
+        prodottoModelDm.doSave(bean);
         response.sendRedirect(request.getContextPath() + "/ShopControl");
       } else {
         throw new Exception("azione sconosciuta");

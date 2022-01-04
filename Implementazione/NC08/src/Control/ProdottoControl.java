@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/Prodotto")
 public class ProdottoControl extends HttpServlet {
   private static final long serialVersionUID = 1L;
-
+  private final ProdottoModelDm prodottoModelDm = new ProdottoModelDm();
   /**
      * Costruttore vuoto.
      *
@@ -39,7 +39,7 @@ public class ProdottoControl extends HttpServlet {
     String id = request.getParameter("isbn");
     ProdottoBean prodotto = new ProdottoBean();
     try {
-      prodotto = (ProdottoBean) ProdottoModelDm.doQuery("doRetrieveByKey", id);
+      prodotto = (ProdottoBean) prodottoModelDm.doRetrieveByKey(id);
     } catch (SQLException e) {
       e.printStackTrace();
     }

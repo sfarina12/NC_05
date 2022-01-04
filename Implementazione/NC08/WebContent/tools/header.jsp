@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="control.*, model.*,java.net.*,java.text.*, java.util.*, java.sql.SQLException"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="Control.*, Model.*,java.net.*,java.text.*, java.util.*, java.sql.SQLException"%>
 
 <!DOCTYPE html>
 <html>
