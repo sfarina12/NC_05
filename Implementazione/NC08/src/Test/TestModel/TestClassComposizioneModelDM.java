@@ -1,85 +1,104 @@
 package Test.TestModel;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import Bean.ComposizioneBean;
+import Bean.OrdineBean;
+import Bean.ProdottoBean;
 import Model.ComposizioneModelDm;
+import Model.OrdineModelDm;
+import Model.ProdottoModelDm;
 
+/**
+ * Classe Test per OrdineModelDm.java.
+ *
+ * @author Alfonso Cuomo
+ *
+ */
+class TestClassComposizioneModelDm {
 
-class TestClassComposizioneModelDM {
+  ProdottoModelDm prodottoModel;
+  ProdottoBean prodotto = new ProdottoBean("isbn", "titolo", 
+            "autore", 10f, null, "descrizione", "categoria", 10);
+  OrdineModelDm ordineModel;
+  OrdineBean order = new OrdineBean("0000-00-00", 1, 
+            "indirizzo", "asia@dodo.it", true, 10f);
+  ComposizioneModelDm composizioneModel;
+  ComposizioneBean bean = new ComposizioneBean(1, "isbn", 10);
 
-  /**
-   * Classe Test per OrdineModelDm.java.
-   *
-   * @author Farina Simone
-   *
-   */
+  @BeforeEach
+  public  void setUp() throws SQLException {
 
-  @Test
-    void testDoRetrieveAll() throws SQLException {
-    System.out.println("Testing :COMPOSIZIONE: DoRetrieveAll()");
+    prodottoModel = new ProdottoModelDm();
+    ProdottoBean copertina = prodottoModel.doRetrieveByKey("9781245562344");
+    prodotto.setCopertina(copertina.getCopertina());
+    prodottoModel.doSave(prodotto);
 
-    ComposizioneModelDm dm = new ComposizioneModelDm();
-    
-    ArrayList<ComposizioneBean> ordini = dm.doRetrieveAll(1);
-    assertNotNull(ordini);
+    ordineModel = new OrdineModelDm();
+    ordineModel.doSave(this.order);
+
+    composizioneModel = new ComposizioneModelDm();
+    composizioneModel.doSave(this.bean);
   }
-  
+
+  @AfterEach
+  public void setDown() throws SQLException {
+
+	composizioneModel.doDelete(this.bean.getIdOrdine());  
+    prodottoModel.doDelete(this.prodotto.getIsbn());
+    ordineModel.doDelete(this.order.getIdOrdine());
+  }
+
   @Test
     void testDoSave() throws SQLException {
     System.out.println("Testing :COMPOSIZIONE: DoSave()");
-
-    ComposizioneModelDm dm = new ComposizioneModelDm();
     
-    ComposizioneBean exampleOrdine = new ComposizioneBean(11, "9781245562344", 1);
-
-    int i = dm.doSave(exampleOrdine);
-
-    dm.doDelete(exampleOrdine.getIdOrdine());
-
-    assertEquals(i, 1);
+    // vedere setUp()
   }
 
   @Test
     void testDoDelete() throws SQLException {
     System.out.println("Testing :ORDINE: DoDelete()");
-
-    ComposizioneModelDm dm = new ComposizioneModelDm();
     
-    ComposizioneBean exampleOrdine = new ComposizioneBean(11, "9781245562344", 1);
-
-    dm.doSave(exampleOrdine);
-
-    boolean i = dm.doDelete(exampleOrdine.getIdOrdine());
-
-    assertEquals(i, true);
+    // vedere setDown()
   }
 
   @Test
     void testDoRetrieveByKey() throws SQLException {
     System.out.println("Testing :COMPOSIZIONE: DoRetrieveBeKey");
     
-    ComposizioneModelDm dm = new ComposizioneModelDm();
-    
-    ComposizioneBean exampleOrdine = new ComposizioneBean(11, "9781245562344", 1);
-
-    dm.doSave(exampleOrdine);
-    
-    ComposizioneBean bean = (ComposizioneBean) dm.doRetrieveByKey(11);
-    ComposizioneBean expected =
-        new ComposizioneBean(11, "9781245562344", 1);
-
-    assertTrue(expected.getIdOrdine() == bean.getIdOrdine()
-        && expected.getIsbn().equals(bean.getIsbn())
-        && expected.getQuantita() == bean.getQuantita());
-    
-    dm.doDelete(bean.getIdOrdine());
+    ComposizioneBean composizione = composizioneModel.doRetrieveByKey(this.bean.getIdOrdine());
+    assertTrue(1 == composizione.getIdOrdine());
+    assertTrue("isbn".equals(composizione.getIsbn()));
+    assertTrue(10 == composizione.getQuantita());
   }
+  
+  
+  
+  /* @Test
+  void testDoRetrieveAll() throws SQLException {
+  System.out.println("Testing :COMPOSIZIONE: DoRetrieveAll()");
+
+  ArrayList<ComposizioneBean> lista = new ArrayList<ComposizioneBean>();
+  ComposizioneBean beanPlus = new ComposizioneBean(1, "isbn1", 50); 
+  ComposizioneBean beanPlusPlus = new OrdineBean(2, "isbn2", 80); 
+
+  ordineModel.doSave(orderPlus);
+  ordineModel.doSave(nonInLista);
+  lista = ordineModel.doRetrieveAll("asia@dodo.it");
+  
+  assertEquals(2, lista.size());
+  ordineModel.doDelete(orderPlus.getIdOrdine());
+  ordineModel.doDelete(nonInLista.getIdOrdine());
+  
+}*/
 }

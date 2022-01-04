@@ -1,93 +1,96 @@
 package Test.TestModel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import Bean.OrdineBean;
+import Bean.ProdottoBean;
+import Bean.UtenteBean;
 import Model.OrdineModelDm;
+import Model.ProdottoModelDm;
 
 /**
  * Classe Test per OrdineModelDm.java.
  *
- * @author Farina Simone
+ * @author Alfonso Cuomo 
  *
  */
 
-class TestClassOrdineModelDM {
+class TestClassOrdineModelDm {
+
+  OrdineModelDm ordineModel;
+  OrdineBean order = new OrdineBean("0000-00-00", 1, 
+          "indirizzo", "asia@dodo.it", true, 10f);
+
+  @BeforeEach
+    public  void setUp() throws SQLException {
+    ordineModel = new OrdineModelDm();
+    ordineModel.doSave(this.order);
+  }
+
+  @AfterEach
+    public void setDown() throws SQLException {
+    ordineModel.doDelete(this.order.getIdOrdine());
+  }
 
   @Test
     void testDoRetrieveAll() throws SQLException {
     System.out.println("Testing :ORDINE: DoRetrieveAll()");
-
-    OrdineModelDm dm = new OrdineModelDm();
     
-    ArrayList<OrdineBean> ordini = dm.doRetrieveAll("dario@dodo.it");
-    assertNotNull(ordini);
+    ArrayList<OrdineBean> lista = new ArrayList<OrdineBean>();
+    OrdineBean orderPlus = new OrdineBean("1-1-1", 2, 
+            "indirizzo", "asia@dodo.it", true, 10f);
+    OrdineBean nonInLista = new OrdineBean("2-2-2", 3, 
+            "indirizzo", "dario@dodo.it", true, 10f);
+    ordineModel.doSave(orderPlus);
+    ordineModel.doSave(nonInLista);
+    lista = ordineModel.doRetrieveAll("asia@dodo.it");
+    
+    assertEquals(2, lista.size());
+    ordineModel.doDelete(orderPlus.getIdOrdine());
+    ordineModel.doDelete(nonInLista.getIdOrdine());
   }
 
   @Test
     void testDoSave() throws SQLException {
     System.out.println("Testing :ORDINE: DoSave()");
-
-    OrdineModelDm dm = new OrdineModelDm();
     
-    OrdineBean exampleOrdine = 
-        new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it", false, (float) 0);
-
-    int i = dm.doSave(exampleOrdine);
-
-    dm.doDelete(1);
-
-    assertEquals(i, 1);
+    OrdineBean order2 = new OrdineBean("1-1-1", 2, 
+            "indirizzo", "asia@dodo.it", true, 10f);
+    int i = ordineModel.doSave(order2);
+    
+    assertEquals(1, i);
+    ordineModel.doDelete(order2.getIdOrdine());
   }
 
   @Test
     void testDoDelete() throws SQLException {
     System.out.println("Testing :ORDINE: DoDelete()");
 
-    OrdineModelDm dm = new OrdineModelDm();
-    
-    OrdineBean exampleOrdine = 
-        new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it", false, (float) 0);
-
-    dm.doSave(exampleOrdine);
-
-    boolean i = dm.doDelete(1);
-
-    assertEquals(i, false);
+    assertNotNull(ordineModel.doDelete(order.getIdOrdine()));
+    ordineModel.doSave(order);
   }
   
   @Test
     void testDoRetrieveByKey() throws SQLException {
-    System.out.println("Testing :ORDINE: DoRetrieveBeKey");
+    System.out.println("Testing :ORDINE: DoRetrieveBeKey()");
     
-    OrdineModelDm dm = new OrdineModelDm();
-    
-    OrdineBean exampleOrdine = 
-        new OrdineBean("2017-06-15", 1, "indirizzo", "dario@dodo.it", false, (float) 0);
-
-    dm.doSave(exampleOrdine);
-    
-    OrdineBean bean = (OrdineBean) dm.doRetrieveByKey(11);
-    OrdineBean expected =
-        new OrdineBean("2017-06-15", 11, "indirizzo", "dario@dodo.it", false, (float) 0);
-    
-    assertTrue(expected.getData().equals(bean.getData())
-        && expected.getIdOrdine() == bean.getIdOrdine()
-        && expected.getIndirizzo().equals(bean.getIndirizzo())
-        && expected.getMail().equals(bean.getMail())
-        && expected.getTotale() == bean.getTotale());
-    
-    dm.doDelete(1);
+    OrdineBean ordine = ordineModel.doRetrieveByKey(order.getIdOrdine());
+    assertTrue("0000-00-00".equals(ordine.getData()));
+    assertTrue(1 == (ordine.getIdOrdine()));
+    assertTrue("indirizzo".equals(ordine.getIndirizzo()));
+    assertTrue("asia@dodo.it".equals(ordine.getMail()));
+    assertTrue(true == ordine.isMetodoPagamento());
+    assertTrue(10f == ordine.getTotale());
   }
-
-
 }
