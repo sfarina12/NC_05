@@ -30,6 +30,16 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/FonsYs/Desktop/Ingegneria Del Software/mockito-core-4.2.0.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/GitHubDesktop/NC_05/Implementazione/NC08/WebContent/WEB-INF/Librerie/mockito-core-4.2.0.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/apiguardian-api-1.1.0.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/hamcrest-core-1.1.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mockito-all-1.10.19.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mssql-jdbc-8.2.2.jre13.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/mysql-connector-java-8.0.12.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/objenesis-1.0.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/spring-core-5.2.12.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/spring-test-5.2.12.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/HDD mass storage/UNISA/Terzo Anno/Primo Semestre/Ingegneria del software/ProgettoIS_NC05/Implementazione/NC05/WebContent/WEB-INF/lib/spring-web-4.3.30.RELEASE.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
