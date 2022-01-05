@@ -71,7 +71,8 @@ public class UtenteControl extends HttpServlet {
     String redirectedPage = "/Login.jsp";
     try {
       if (isRegister.charAt(0) == 'N') {
-        switch (checkLogin(username, password)) {
+        int valueCheck = checkLogin(username, password);
+        switch (valueCheck) {
           case 0:
             request.getSession().setAttribute("role", "normal"); 
             redirectedPage = "/HomePage.jsp";
@@ -79,6 +80,12 @@ public class UtenteControl extends HttpServlet {
           case 1:
             request.getSession().setAttribute("role", "admin"); 
             redirectedPage = "/ShopPage.jsp";
+            break;
+          case -1:
+            session.setAttribute("loggedUser", null);
+            session.setAttribute("logout", "N");
+            session.setAttribute("role", "-1");
+            redirectedPage = "/Login.jsp";
             break;
           default:break;
         }
@@ -93,10 +100,12 @@ public class UtenteControl extends HttpServlet {
 
           model.doSave(user);
 
-          redirectedPage = "/Login.jsp";
+          redirectedPage = "/ShopPage.jsp";
         }
       }
     } catch (Exception e) {
+      session.setAttribute("loggedUser", null);
+      session.setAttribute("logout", "N");
       session.setAttribute("role", "-1");
       redirectedPage = "/Login.jsp";
     }
@@ -130,7 +139,7 @@ public class UtenteControl extends HttpServlet {
       }
     } catch (Exception e) {
       System.out.println("Errore utente");
-    }
+    }    
     return -1;
   }
 }
