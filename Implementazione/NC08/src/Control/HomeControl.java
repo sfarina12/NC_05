@@ -28,7 +28,6 @@ public class HomeControl extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     ArrayList<ProdottoBean> prodotti = null;
-    System.out.println("ciao");
     try {
       prodotti = new ArrayList<>(
           (LinkedList<ProdottoBean>) prodottoModelDm.doRetrieveAll());
