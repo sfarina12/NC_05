@@ -30,7 +30,15 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/apiguardian-api-1.1.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/hamcrest-core-1.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mockito-all-1.10.19.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mockito-core-3.6.28.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mockito-core-4.2.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mssql-jdbc-8.2.2.jre13.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-8.0.12.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/objenesis-1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-core-5.3.14.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-test-5.3.14.jar"/>
 	<classpathentry kind="output" path="target/classes"/>

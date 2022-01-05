@@ -98,9 +98,17 @@ public class UtenteControl extends HttpServlet {
           user.setPassword((String) request.getAttribute("usrPass"));
           user.setAdmin(false);
 
-          model.doSave(user);
-
-          redirectedPage = "/ShopPage.jsp";
+          if (user.getNickname() == "" 
+                || user.getMail() == ""
+                || user.getPassword() == "") {
+            session.setAttribute("loggedUser", null);
+            session.setAttribute("logout", "N");
+            session.setAttribute("role", "-1");
+            redirectedPage = "/Registrazione.jsp";
+          } else {
+            model.doSave(user);
+            redirectedPage = "/ShopPage.jsp";
+          }
         }
       }
     } catch (Exception e) {
@@ -119,7 +127,7 @@ public class UtenteControl extends HttpServlet {
   private int checkLogin(String mail, String password) throws Exception {
     
     UtenteBean usr = (UtenteBean) model.doCheckLogin(mail, password);
-    System.out.println(usr.getMail());
+    
     try {
       if (usr != null) {
         session.setAttribute("loggedUser", usr);
