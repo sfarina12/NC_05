@@ -67,11 +67,8 @@ public class UtenteControl extends HttpServlet {
       
       return;
     }
-    
     session = request.getSession();
-
     String redirectedPage = "/Login.jsp";
-    
     try {
       if (isRegister.charAt(0) == 'N') {
         switch (checkLogin(username, password)) {
@@ -113,11 +110,15 @@ public class UtenteControl extends HttpServlet {
   private int checkLogin(String mail, String password) throws Exception {
     
     UtenteBean usr = (UtenteBean) model.doCheckLogin(mail, password);
-
+    System.out.println(usr.getMail());
     try {
       if (usr != null) {
         session.setAttribute("loggedUser", usr);
 
+        if (usr.getMail() == null) {
+          return -1;
+        }
+        
         if (usr.isAdmin() == false) {
           return 0;
         }
