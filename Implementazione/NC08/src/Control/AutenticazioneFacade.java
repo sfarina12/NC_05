@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * rendendo più semplice l'accesso ad esse.
  * La scelta della servlet è data dal parametro action.
  *
- * @author Gioacchino Saraceno
+ * @author Simone Farina
  */
 @WebServlet("/AutenticazioneFacade")
 public class AutenticazioneFacade extends HttpServlet {
