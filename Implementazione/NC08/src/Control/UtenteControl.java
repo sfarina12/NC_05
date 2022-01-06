@@ -92,22 +92,50 @@ public class UtenteControl extends HttpServlet {
       } else {
         if (checkLogin(username, password) == -1) {
           UtenteBean user = new UtenteBean();
+          boolean dontSave = false;
           
           user.setNickname((String) request.getAttribute("usrNick"));
           user.setMail((String) request.getAttribute("usrMail"));
           user.setPassword((String) request.getAttribute("usrPass"));
           user.setAdmin(false);
 
-          if (user.getNickname() == "" 
-                || user.getMail() == ""
-                || user.getPassword() == "") {
-            session.setAttribute("loggedUser", null);
-            session.setAttribute("logout", "N");
-            session.setAttribute("role", "-1");
-            redirectedPage = "/Registrazione.jsp";
-          } else {
+          if (user.getMail() == "") {
+            redirectedPage = failedRegisterRedirectSettings();
+            jout("mail vuota");
+            dontSave = true;
+          } else if (!user.getMail().matches("[A-z0-9.+-]+@[A-z0-9.-]+.[A-z]")) {
+            redirectedPage = failedRegisterRedirectSettings();
+            jout("mail sbagliata");
+            dontSave = true;
+          }
+
+          if (user.getPassword() == "") {
+            redirectedPage = failedRegisterRedirectSettings();
+            jout("pass vuota");
+            dontSave = true;
+          } else if (user.getPassword().length() < 8) {
+            redirectedPage = failedRegisterRedirectSettings();
+            jout("pass piccola");
+            dontSave = true;
+          } else if (!user.getPassword().matches("^[a-zA-Z0-9]{8,}$")) {
+            redirectedPage = failedRegisterRedirectSettings();
+            jout("pass sbagliata");
+            dontSave = true;
+          }
+
+          if (user.getNickname() == "") {
+            redirectedPage = failedRegisterRedirectSettings();
+            jout("nick vuota");
+            dontSave = true;
+          } else if (!user.getNickname().matches("[a-zA-Z0-9]*")) {
+            redirectedPage = failedRegisterRedirectSettings();
+            jout("nick sbagliato");
+            dontSave = true;
+          }         
+          
+          if (!dontSave) {
             model.doSave(user);
-            redirectedPage = "/ShopPage.jsp";
+            redirectedPage = "/ShopPage.jsp";  
           }
         }
       }
@@ -116,8 +144,20 @@ public class UtenteControl extends HttpServlet {
       session.setAttribute("logout", "N");
       session.setAttribute("role", "-1");
       redirectedPage = "/Login.jsp";
+      System.out.println(e.getMessage());
     }
     response.sendRedirect(request.getContextPath() + redirectedPage);
+  }
+  
+  private String failedRegisterRedirectSettings() {
+    session.setAttribute("loggedUser", null);
+    session.setAttribute("logout", "N");
+    session.setAttribute("role", "-1");
+    return "/Registrazione.jsp";  
+  }
+  
+  private void jout(Object obj) {
+    System.out.println(obj);
   }
   
   /**
