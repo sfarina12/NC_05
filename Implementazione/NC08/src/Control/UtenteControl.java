@@ -103,6 +103,10 @@ public class UtenteControl extends HttpServlet {
             redirectedPage = failedRegisterRedirectSettings();
             jout("mail vuota");
             dontSave = true;
+          } else if (user.getMail().length() > 25) {
+            redirectedPage = failedRegisterRedirectSettings();
+            jout("pass troppo grande");
+            dontSave = true;
           } else if (!user.getMail().matches("[A-z0-9.+-]+@[A-z0-9.-]+.[A-z]")) {
             redirectedPage = failedRegisterRedirectSettings();
             jout("mail sbagliata");
@@ -127,7 +131,7 @@ public class UtenteControl extends HttpServlet {
             redirectedPage = failedRegisterRedirectSettings();
             jout("nick vuota");
             dontSave = true;
-          } else if (!user.getNickname().matches("[a-zA-Z0-9]*")) {
+          } else if (!user.getNickname().matches("[a-zA-Z0-9_]*")) {
             redirectedPage = failedRegisterRedirectSettings();
             jout("nick sbagliato");
             dontSave = true;
@@ -143,7 +147,7 @@ public class UtenteControl extends HttpServlet {
       session.setAttribute("loggedUser", null);
       session.setAttribute("logout", "N");
       session.setAttribute("role", "-1");
-      redirectedPage = "/Login.jsp";
+      redirectedPage = isRegister.charAt(0) == 'N' ? "/Login.jsp" : "/Registrazione.jsp";
       System.out.println(e.getMessage());
     }
     response.sendRedirect(request.getContextPath() + redirectedPage);
