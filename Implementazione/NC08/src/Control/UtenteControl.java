@@ -3,6 +3,8 @@ package Control;
 import Bean.UtenteBean;
 import Model.UtenteModelDm;
 import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -71,11 +73,11 @@ public class UtenteControl extends HttpServlet {
     String redirectedPage = "/Login.jsp";
     try {
       if (isRegister.charAt(0) == 'N') {
-        int valueCheck = checkLogin(username, password);
+        int valueCheck = checkLogin(username, password, isRegister);
         switch (valueCheck) {
           case 0:
             request.getSession().setAttribute("role", "normal"); 
-            redirectedPage = "/HomePage.jsp";
+            redirectedPage = "/HomePage.jsp"; 
             break;
           case 1:
             request.getSession().setAttribute("role", "admin"); 
@@ -90,65 +92,83 @@ public class UtenteControl extends HttpServlet {
           default:break;
         }
       } else {
-        if (checkLogin(username, password) == -1) {
+        int value = checkLogin(username, password, isRegister);
+        boolean dontSave = false;
+        if (value == -2) {
+          redirectedPage = failedRegisterRedirectSettings();
+          dontSave = true;
+          response.sendRedirect(request.getContextPath() + redirectedPage);
+          throw new IllegalArgumentException("email già presente!");
+        }
+        if (value == -1) {
           UtenteBean user = new UtenteBean();
-          boolean dontSave = false;
           
           user.setNickname((String) request.getAttribute("usrNick"));
           user.setMail((String) request.getAttribute("usrMail"));
           user.setPassword((String) request.getAttribute("usrPass"));
           user.setAdmin(false);
 
+          // caso particolare in cui i campi sono vuoti
+          if (user.getMail() == "" && user.getNickname() == "" && user.getPassword() == "") {
+            redirectedPage = failedRegisterRedirectSettings();
+            dontSave = true;
+            response.sendRedirect(request.getContextPath() + redirectedPage);
+            throw new IllegalArgumentException("i campi sono vuoti");
+          }
           if (user.getMail() == "") {
             redirectedPage = failedRegisterRedirectSettings();
-            jout("mail vuota");
             dontSave = true;
+            response.sendRedirect(request.getContextPath() + redirectedPage);
+            throw new IllegalArgumentException("l'email non rispetta la lunghezza");
           } else if (user.getMail().length() > 25) {
             redirectedPage = failedRegisterRedirectSettings();
-            jout("pass troppo grande");
             dontSave = true;
-          } else if (!user.getMail().matches("[A-z0-9.+-]+@[A-z0-9.-]+.[A-z]")) {
+            response.sendRedirect(request.getContextPath() + redirectedPage);
+            throw new IllegalArgumentException("l'email non rispetta la lunghezza");
+          } else if (!user.getMail().matches("^\\w+([.-]?\\w+)@\\w+([.-]?\\w+)(.\\w{2,3})+$")) {
             redirectedPage = failedRegisterRedirectSettings();
-            jout("mail sbagliata");
             dontSave = true;
+            response.sendRedirect(request.getContextPath() + redirectedPage);
+            throw new IllegalArgumentException("l'email non rispetta il formato");
           }
 
           if (user.getPassword() == "") {
             redirectedPage = failedRegisterRedirectSettings();
-            jout("pass vuota");
             dontSave = true;
+            throw new IllegalArgumentException("la password non rispetta la lunghezza");
           } else if (user.getPassword().length() < 8) {
             redirectedPage = failedRegisterRedirectSettings();
-            jout("pass piccola");
             dontSave = true;
+            throw new IllegalArgumentException("la password non rispetta la lunghezza");
           } else if (!user.getPassword().matches("^[a-zA-Z0-9]{8,}$")) {
             redirectedPage = failedRegisterRedirectSettings();
-            jout("pass sbagliata");
             dontSave = true;
+            throw new IllegalArgumentException("la password non rispetta il formato");
           }
 
           if (user.getNickname() == "") {
             redirectedPage = failedRegisterRedirectSettings();
-            jout("nick vuota");
             dontSave = true;
+            throw new IllegalArgumentException("il ninckname non rispetta la lunghezza");
           } else if (!user.getNickname().matches("[a-zA-Z0-9_]*")) {
             redirectedPage = failedRegisterRedirectSettings();
-            jout("nick sbagliato");
             dontSave = true;
-          }         
+            throw new IllegalArgumentException("il nickname non rispetta la lunghezza");
+          }
           
           if (!dontSave) {
             model.doSave(user);
             redirectedPage = "/ShopPage.jsp";  
+            response.sendRedirect(request.getContextPath() + redirectedPage);
+            throw new IllegalArgumentException("utente Registrato!");
           }
         }
       }
-    } catch (Exception e) {
+    } catch (SQLException e) {
       session.setAttribute("loggedUser", null);
       session.setAttribute("logout", "N");
       session.setAttribute("role", "-1");
       redirectedPage = isRegister.charAt(0) == 'N' ? "/Login.jsp" : "/Registrazione.jsp";
-      System.out.println(e.getMessage());
     }
     response.sendRedirect(request.getContextPath() + redirectedPage);
   }
@@ -160,19 +180,18 @@ public class UtenteControl extends HttpServlet {
     return "/Registrazione.jsp";  
   }
   
-  private void jout(Object obj) {
-    System.out.println(obj);
-  }
-  
   /**
    * controlla se l'utente con quella mail e password esiste gia
    * e restituisce il ruolo dell'utente (admin o no).
    */
-  private int checkLogin(String mail, String password) throws Exception {
-    
-    UtenteBean usr = (UtenteBean) model.doCheckLogin(mail, password);
-    
+  private int checkLogin(String mail, String password, String isRegister) {
     try {
+      UtenteBean user = (UtenteBean) model.doRetrieveByKey(mail);
+      if ((user.getMail() != null) && (isRegister.charAt(0) == 'Y')) {
+        return -2;
+      }
+      UtenteBean usr = (UtenteBean) model.doCheckLogin(mail, password);
+    
       if (usr != null) {
         session.setAttribute("loggedUser", usr);
 

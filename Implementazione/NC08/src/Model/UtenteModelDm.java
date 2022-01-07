@@ -133,7 +133,7 @@ public class UtenteModelDm {
   }
 
   /**
-   * Medoto che controlla se esistono utenti con quella password o mail.
+   * Medoto che controlla se esistono utenti con quella password e mail.
    *
    */
   public synchronized UtenteBean doCheckLogin(

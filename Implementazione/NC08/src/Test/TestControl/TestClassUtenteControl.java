@@ -1,23 +1,17 @@
 package Test.TestControl;
 
-import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
@@ -52,17 +46,83 @@ class TestClassUtenteControl {
   // TC_1.1_06
   @Test
   void testTcCampiNonCompilati() throws IOException, ServletException {
-    System.out.println("Testing (UtenteControl) -> Campi Non Compilati()..");
+    System.out.println("Testing (UtenteControl) -> Campi Non Compilati..");
+
+    String oracolo = "i campi sono vuoti";
 
     request.setAttribute("usrMail", "");
     request.setAttribute("usrPass", "");
-    request.setAttribute("registerOrNot", "N");
+    request.setAttribute("registerOrNot", "Y");
     request.setAttribute("logout", "N");
     request.setAttribute("usrNick", "");
     
-    servlet.doGet(request, response);
-    assertEquals(response.getForwardedUrl(), "/User/login.jsp");
-
+    IllegalArgumentException exception = 
+            assertThrows(IllegalArgumentException.class, () -> {
+              servlet.doGet(request, response);
+            });
+    
+    assertEquals(oracolo, exception.getMessage());
   }
+  
+  @Test
+  void testTcEmailNonCorretta() throws IOException, ServletException {
+    System.out.println("Testing (UtenteControl) -> Email non rispetta il formato..");
 
+    String oracolo = "l'email non rispetta il formato";
+
+    request.setAttribute("usrMail", "enzo@dodo");
+    request.setAttribute("usrPass", "enzo1234");
+    request.setAttribute("registerOrNot", "Y");
+    request.setAttribute("logout", "N");
+    request.setAttribute("usrNick", "eats_dinner");
+
+    IllegalArgumentException exception = 
+        assertThrows(IllegalArgumentException.class, () -> {
+          servlet.doGet(request, response);
+        });
+
+    assertEquals(oracolo, exception.getMessage());
+  }
+  
+  //TC_1.1_07
+  @Test
+  void testTcEmaiPresente() throws IOException, ServletException {
+    System.out.println("Testing (UtenteControl) -> Email già presente nel DB..");
+
+    String oracolo = "email già presente!";
+
+    request.setAttribute("usrMail", "asia@dodo.it");
+    request.setAttribute("usrPass", "enzo1234");
+    request.setAttribute("registerOrNot", "Y");
+    request.setAttribute("logout", "N");
+    request.setAttribute("usrNick", "eats_dinner");
+    
+    IllegalArgumentException exception = 
+        assertThrows(IllegalArgumentException.class, () -> {
+          servlet.doGet(request, response);
+        });
+
+    assertEquals(oracolo, exception.getMessage());
+  }
+  
+//TC_1.1_07
+  @Test
+  void testTcUtenteRegistratoSuccess() throws IOException, ServletException {
+    System.out.println("Testing (UtenteControl) -> Utente registrato con successo..");
+
+    request.setAttribute("usrMail", "uccello@dodo.it");
+    request.setAttribute("usrPass", "password123");
+    request.setAttribute("registerOrNot", "Y");
+    request.setAttribute("logout", "N");
+    request.setAttribute("usrNick", "bird23");
+    
+    String oracolo = "utente Registrato!";
+    
+    IllegalArgumentException exception = 
+            assertThrows(IllegalArgumentException.class, () -> {
+              servlet.doGet(request, response);
+            });
+
+        assertEquals(oracolo, exception.getMessage());
+  }
 }
