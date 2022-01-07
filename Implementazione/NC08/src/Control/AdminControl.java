@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminControl extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private final ProdottoModelDm prodottoModelDm = new ProdottoModelDm();
+  
   public AdminControl() {
     super();
   }
@@ -25,6 +26,7 @@ public class AdminControl extends HttpServlet {
   protected void doGet(HttpServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
     String action = (String) request.getAttribute("action");
+    
     try {
       if (action.equals("delete")) {
         String isbn = (String) request.getAttribute("isbn");
@@ -49,6 +51,7 @@ public class AdminControl extends HttpServlet {
         bean.setPrezzo(prezzo);
         bean.setQuantitaStock(quantitaStock);
         bean.setCopertina(file);
+
         prodottoModelDm.doSave(bean);
         response.sendRedirect(request.getContextPath() + "/ShopControl");
       } else {

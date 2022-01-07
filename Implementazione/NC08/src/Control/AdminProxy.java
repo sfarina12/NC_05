@@ -20,8 +20,8 @@ import javax.servlet.http.Part;
  * @author Farina Simone
  */
 @WebServlet("/AdminProxy")
-@MultipartConfig(fileSizeThreshold = 102410242,
-    maxFileSize = 1024102410, maxRequestSize = 1024102450)
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, 
+    maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 50)
 public class AdminProxy extends HttpServlet {
   private static final long serialVersionUID = 1L;
        
@@ -33,64 +33,60 @@ public class AdminProxy extends HttpServlet {
       HttpServletResponse response) throws ServletException, IOException {
 
     try {
-      if (request.getSession(false) != null) {
-        throw new Exception("Nessuna sessione!");
+      HttpSession session = request.getSession();
+
+      if (session.getAttribute("role") == null
+          || ((String) session.getAttribute("role")).equals("normal")) {
+        throw new Exception("Accesso negato");
       } else {
-        HttpSession session = request.getSession();
+        String action = request.getParameter("action");
 
-        if (session.getAttribute("role") == null
-            || ((String) session.getAttribute("role")).equals("normal")) {
-          throw new Exception("Accesso negato");
-        } else {
-          String action = request.getParameter("action");
+        if (action.equals("delete")) {
+          String isbn = request.getParameter("isbn");
+          request.setAttribute("isbn", isbn);
+          request.setAttribute("action", action);
+          RequestDispatcher dispatcher =
+              this.getServletContext().getRequestDispatcher("/AdminControl");
+          dispatcher.forward(request, response);
+        } else if (action.equals("add")) {
+          request.setAttribute("action", action);
 
-          if (action.equals("delete")) {
-            String isbn = request.getParameter("isbn");
-            request.setAttribute("isbn", isbn);
-            request.setAttribute("action", action);
-            RequestDispatcher dispatcher =
-                this.getServletContext().getRequestDispatcher("/AdminControl");
-            dispatcher.forward(request, response);
-          } else if (action.equals("add")) {
-            request.setAttribute("action", action);
-
-            String appPath = request.getServletContext().getRealPath("");
-            String savePath = appPath + File.separator + "UploadTemp";
-            File fileSaveDir = new File(savePath);
-            if (!fileSaveDir.exists()) { 
-              fileSaveDir.mkdir();
-            }
-
-            for (Part part : request.getParts()) {
-              String fileName = extractFileName(part);
-              if (fileName != null && !fileName.equals("")) {
-                part.write(savePath + File.separator + fileName);
-                byte[] fileContent = Files.readAllBytes(
-                    new File(savePath + File.separator + fileName).toPath());
-                request.setAttribute("file", fileContent);
-              }
-            }
-            String descrizione = request.getParameter("descrizione"); 
-            String nomeCategoria = request.getParameter("nomeCategoria");
-            String quantitaStock = request.getParameter("quantitaStock");
-            String isbn = request.getParameter("isbn");
-            String titolo = request.getParameter("titolo");
-            String autore = request.getParameter("autore");
-            String prezzo = request.getParameter("prezzo");
-
-            request.setAttribute("isbn", isbn);
-            request.setAttribute("titolo", titolo);
-            request.setAttribute("autore", autore);
-            request.setAttribute("prezzo", prezzo);
-            request.setAttribute("descrizione", descrizione);
-            request.setAttribute("nomeCategoria", nomeCategoria);
-            request.setAttribute("quantitaStock", quantitaStock);
-            RequestDispatcher dispatcher = 
-                this.getServletContext().getRequestDispatcher("/AdminControl");
-            dispatcher.forward(request, response);
-          } else {
-            throw new Exception("action errato!");
+          String appPath = request.getServletContext().getRealPath("");
+          String savePath = appPath + File.separator + "UploadTemp";
+          File fileSaveDir = new File(savePath);
+          if (!fileSaveDir.exists()) { 
+            fileSaveDir.mkdir();
           }
+
+          for (Part part : request.getParts()) {
+            String fileName = extractFileName(part);
+            if (fileName != null && !fileName.equals("")) {
+              part.write(savePath + File.separator + fileName);
+              byte[] fileContent = Files.readAllBytes(
+                  new File(savePath + File.separator + fileName).toPath());
+              request.setAttribute("file", fileContent);
+            }
+          }
+          String descrizione = request.getParameter("descrizione"); 
+          String nomeCategoria = request.getParameter("nomeCategoria");
+          String quantitaStock = request.getParameter("quantitaStock");
+          String isbn = request.getParameter("isbn");
+          String titolo = request.getParameter("titolo");
+          String autore = request.getParameter("autore");
+          String prezzo = request.getParameter("prezzo");
+
+          request.setAttribute("isbn", isbn);
+          request.setAttribute("titolo", titolo);
+          request.setAttribute("autore", autore);
+          request.setAttribute("prezzo", prezzo);
+          request.setAttribute("descrizione", descrizione);
+          request.setAttribute("nomeCategoria", nomeCategoria);
+          request.setAttribute("quantitaStock", quantitaStock);
+          RequestDispatcher dispatcher = 
+              this.getServletContext().getRequestDispatcher("/AdminControl");
+          dispatcher.forward(request, response);
+        } else {
+          throw new Exception("action errato!");
         }
       }
     } catch (Exception e) {

@@ -14,7 +14,9 @@
 <div class="container mt-4">
   <% if(session.getAttribute("loggedUser") != null && session.getAttribute("role") == "admin" ){%> 
   <div class="text-center">
-	<button type="button" class="btn btn-warning mt-2 mb-5" href="#" style="color:white;">Aggiungi nuovo libro</button>
+	<button type="button" class="btn btn-warning mt-2 mb-5">
+		<a class="nav-link" href="./NuovoProdotto.jsp" style="color:white;">Aggiungi nuovo libro</a>
+	</button>
   </div>
   <%}%>
   <div class="row">
