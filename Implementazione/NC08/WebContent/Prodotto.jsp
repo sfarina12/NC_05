@@ -34,7 +34,12 @@
             <button class="btn btn-outline-warning" type="submit">Aggiungi al carrello</button>
         </form>
         <% if(session.getAttribute("loggedUser") != null && session.getAttribute("role") == "admin" ){%> 
-		<button type="button" class="btn btn-warning mt-5 mb-5" href="#" style="color:white;">Rimuovi libro</button>
+        <form action="AdminProxy" method="get">
+			<input type="submit" class="btn btn-warning mt-5 mb-5" value="Rimuovi libro" style="color:white;">
+			
+			<input type="text" name="action" value="delete" hidden="true">
+			<input type="text" name="isbn" value="<%= prodotto.getIsbn()%>" hidden="true">
+		</form>
 	   <%}%>
         <% } else { %>
         <p>Non ci sono copie disponibili al momento, a breve ne arriveranno di nuove!</p>
