@@ -12,6 +12,7 @@
 <link rel="stylesheet" type="text/css" href="./tools/lib/slick/slick-theme.css"/>
 <!-- import file css esterno -->
 <link href="./tools/css/style.css" rel="stylesheet">
+<link href="./tools/css/generalCSS.css" rel="stylesheet">
 </head>
 <body>
 <div class="navbar">
@@ -27,19 +28,34 @@
   </li>
    </ul>
 <ul class="nav justify-content-end">
-  <li class="nav-item pt-2">
-   <h3><a class="nav-link" href="">Carrello</a></h3>
-  </li>
-  <% if(session.getAttribute("loggedUser") == null){%> 
-	<li class="nav-item pt-2">
-   		<h3><a class="nav-link" href="./Login.jsp">Autenticazione</a></h3>
-  	</li>
-  <%} else {%>
-  	<li class="nav-item pt-2">
-   		<h3><a class="nav-link" href="AutenticazioneFacade?action=user&logout=Y">Logout</a></h3>
-  	</li>
-  <%}%>
-
+  <%
+  	if(session.getAttribute("loggedUser") != null)
+	{%>
+  		<li class="nav-item pt-2">
+   			<h3><a class="nav-link" href="CartControl">Carrello</a></h3>
+  		</li>
+  	<%}%>
+  	<% if(session.getAttribute("loggedUser") == null){%> 
+		<li class="nav-item pt-2">
+   			<h3><a class="nav-link" href="./Login.jsp">Autenticazione</a></h3>
+  		</li>
+  	<%} else {%>
+  		<li class="nav-item pt-2">
+   			<h3><a class="nav-link" href="AutenticazioneFacade?action=user&logout=Y">Logout</a></h3>
+  		</li>
+  	<%}%>
+  <%
+  	String lastPageVisited = request.getHeader("Referer");
   
+  	if(lastPageVisited!=null)
+  		if(!request.getRequestURI().contains("Login") || lastPageVisited.contains("Login"))
+  		{
+  			if((!lastPageVisited.equals("http://localhost:8080"+request.getRequestURI())))
+  			{
+  				session.setAttribute("gmName", null);
+  				session.setAttribute("gmTxt", null);
+  			}
+  		}
+  %>
 </ul>
 </div>

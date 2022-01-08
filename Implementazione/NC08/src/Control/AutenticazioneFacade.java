@@ -44,6 +44,8 @@ public class AutenticazioneFacade extends HttpServlet {
         dispatcher.forward(request, response);
       } else if (action.equals("shop")) {
         response.sendRedirect(request.getContextPath() + "/ShopControl");
+      } else if (action.equals("cart")) {
+        response.sendRedirect(request.getContextPath() + "/CartControl");
       } else if (action.equals("home")) {
         response.sendRedirect(request.getContextPath() + "/HomeControl");
       } else if (action.equals("prodotto")) {

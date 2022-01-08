@@ -58,7 +58,12 @@ public class UtenteControl extends HttpServlet {
     String password = (String) request.getAttribute("usrPass");
     String isRegister = (String) request.getAttribute("registerOrNot");
     String logout = (String) request.getAttribute("logout");
-
+    
+    session = request.getSession();
+    
+    session.setAttribute("gmName", null);
+    session.setAttribute("gmTxt", null);  
+    
     if (logout.charAt(0) == 'Y') {
       request.getSession().removeAttribute("role");
       request.getSession().removeAttribute("loggedUser");
@@ -69,7 +74,6 @@ public class UtenteControl extends HttpServlet {
       
       return;
     }
-    session = request.getSession();
     String redirectedPage = "/Login.jsp";
     try {
       if (isRegister.charAt(0) == 'N') {
@@ -84,6 +88,9 @@ public class UtenteControl extends HttpServlet {
             redirectedPage = "/ShopPage.jsp";
             break;
           case -1:
+            session.setAttribute("gmName", "Errore");
+            session.setAttribute("gmTxt", "Credenziali errate");  
+        	
             session.setAttribute("loggedUser", null);
             session.setAttribute("logout", "N");
             session.setAttribute("role", "-1");
@@ -95,9 +102,9 @@ public class UtenteControl extends HttpServlet {
         int value = checkLogin(username, password, isRegister);
         boolean dontSave = false;
         if (value == -2) {
-          redirectedPage = failedRegisterRedirectSettings();
+          redirectedPage = failedRegisterRedirectSettings("Errore", "email già presente!");
           dontSave = true;
-          response.sendRedirect(request.getContextPath() + redirectedPage);
+          response.sendRedirect(request.getContextPath() + "/Login.jsp");
           throw new IllegalArgumentException("email già presente!");
         }
         if (value == -1) {
@@ -110,55 +117,66 @@ public class UtenteControl extends HttpServlet {
 
           // caso particolare in cui i campi sono vuoti
           if (user.getMail() == "" && user.getNickname() == "" && user.getPassword() == "") {
-            redirectedPage = failedRegisterRedirectSettings();
+            redirectedPage = failedRegisterRedirectSettings("Errore", "i campi sono vuoti");
             dontSave = true;
             response.sendRedirect(request.getContextPath() + redirectedPage);
             throw new IllegalArgumentException("i campi sono vuoti");
           }
           if (user.getMail() == "") {
-            redirectedPage = failedRegisterRedirectSettings();
+            redirectedPage = failedRegisterRedirectSettings("Errore",
+                "l'email non rispetta la lunghezza di non più di 25 caratteri");
             dontSave = true;
             response.sendRedirect(request.getContextPath() + redirectedPage);
-            throw new IllegalArgumentException("l'email non rispetta la lunghezza");
+            throw new IllegalArgumentException(
+                "l'email non rispetta la lunghezza di non più di 25 caratteri");
           } else if (user.getMail().length() > 25) {
-            redirectedPage = failedRegisterRedirectSettings();
+            redirectedPage = failedRegisterRedirectSettings("Errore",
+                "l'email non rispetta la lunghezza di non più di 25 caratteri");
             dontSave = true;
             response.sendRedirect(request.getContextPath() + redirectedPage);
             throw new IllegalArgumentException("l'email non rispetta la lunghezza");
           } else if (!user.getMail().matches("^\\w+([.-]?\\w+)@\\w+([.-]?\\w+)(.\\w{2,3})+$")) {
-            redirectedPage = failedRegisterRedirectSettings();
+            redirectedPage = failedRegisterRedirectSettings("Errore", 
+                "l'email non rispetta il formato");
             dontSave = true;
             response.sendRedirect(request.getContextPath() + redirectedPage);
             throw new IllegalArgumentException("l'email non rispetta il formato");
           }
 
           if (user.getPassword() == "") {
-            redirectedPage = failedRegisterRedirectSettings();
+            redirectedPage = failedRegisterRedirectSettings("Errore",
+                "la password non rispetta la lunghezza di almeno 8 caratteri");
             dontSave = true;
             throw new IllegalArgumentException("la password non rispetta la lunghezza");
           } else if (user.getPassword().length() < 8) {
-            redirectedPage = failedRegisterRedirectSettings();
+            redirectedPage = failedRegisterRedirectSettings("Errore",
+                "la password non rispetta la lunghezza di almeno 8 caratteri");
             dontSave = true;
             throw new IllegalArgumentException("la password non rispetta la lunghezza");
-          } else if (!user.getPassword().matches("^[a-zA-Z0-9]{8,}$")) {
-            redirectedPage = failedRegisterRedirectSettings();
+          } else if (!user.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+            redirectedPage = failedRegisterRedirectSettings("Errore",
+                "la password non rispetta il formato");
             dontSave = true;
             throw new IllegalArgumentException("la password non rispetta il formato");
           }
 
           if (user.getNickname() == "") {
-            redirectedPage = failedRegisterRedirectSettings();
+            redirectedPage = failedRegisterRedirectSettings("Errore",
+                "il ninckname non rispetta la lunghezza di alemeno un carattere");
             dontSave = true;
             throw new IllegalArgumentException("il ninckname non rispetta la lunghezza");
           } else if (!user.getNickname().matches("[a-zA-Z0-9_]*")) {
-            redirectedPage = failedRegisterRedirectSettings();
+            redirectedPage = failedRegisterRedirectSettings("Errore",
+                "il ninckname non rispetta la lunghezza di alemeno un carattere");
             dontSave = true;
             throw new IllegalArgumentException("il nickname non rispetta la lunghezza");
           }
           
           if (!dontSave) {
             model.doSave(user);
-            redirectedPage = "/ShopPage.jsp";  
+            redirectedPage = "/Login.jsp";  
+            session.setAttribute("gmName", "Successo!");
+            session.setAttribute("gmTxt", "registrazione avvenuta con successo");  
             response.sendRedirect(request.getContextPath() + redirectedPage);
             throw new IllegalArgumentException("utente Registrato!");
           }
@@ -173,7 +191,10 @@ public class UtenteControl extends HttpServlet {
     response.sendRedirect(request.getContextPath() + redirectedPage);
   }
   
-  private String failedRegisterRedirectSettings() {
+  private String failedRegisterRedirectSettings(String nameError, String contentError) {
+    session.setAttribute("gmName", nameError);
+    session.setAttribute("gmTxt", contentError);
+
     session.setAttribute("loggedUser", null);
     session.setAttribute("logout", "N");
     session.setAttribute("role", "-1");

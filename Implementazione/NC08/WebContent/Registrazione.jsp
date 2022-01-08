@@ -22,10 +22,20 @@
 		<input type="text" name="registerOrNot" value="Y" hidden="true">
 	    <input type="text" name="logout" value="N" hidden="true">
 	    <div class="text-center">
-		<button class="btn btn-warning" type="submit"><h3 style="color:white">Continua</h3></button>
+		<button class="btn btn-warning" type="submit"><h3 style="color:white">Registrati</h3></button>
 		</div>
 	</form>
 </div>
+
+<messages>
+	<%if(session.getAttribute("gmName")!=null && session.getAttribute("gmName")!=""){%>
+		<div id="generalMessage">
+			<nome><%=session.getAttribute("gmName")%></nome>
+			<text><%=session.getAttribute("gmTxt")%></text>
+		</div>
+	<%}%>
+	<div id="generalMessage" style="opacity: 0;"><img src="./icons/deleteW_96px.png"><nome></nome><text></text></div>
+</messages> 
 
 </body>
 </html>

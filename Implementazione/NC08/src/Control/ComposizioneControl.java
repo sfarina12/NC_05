@@ -49,8 +49,11 @@ public class ComposizioneControl extends HttpServlet {
     try {
       ordini = ordineModelDm.doRetrieveAll(
           ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail());
-
-      int lastOrderId = ordini.get(ordini.size() - 1).getIdOrdine();
+      
+      int lastOrderId = -1;
+      if (ordini.size() > 0) {
+        lastOrderId = ordini.get(ordini.size() - 1).getIdOrdine();
+      }
       lastOrderId += 1;
       float totale = 0;
       
@@ -62,22 +65,36 @@ public class ComposizioneControl extends HttpServlet {
             totale += underBean.getPrezzo();
           }
         }
+      
+        OrdineBean nuovoOrdine = new OrdineBean(
+            java.time.LocalDate.now().toString(), 
+            lastOrderId, 
+            "PROVVISORIO", 
+            ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail(), 
+            false, 
+            totale);
+      
+        ordineModelDm.doSave(nuovoOrdine);
+
+        if (ordini.size() == 0) {
+          ordini = ordineModelDm.doRetrieveAll(
+            ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail());
+          lastOrderId = ordini.get(ordini.size() - 1).getIdOrdine();
+        }
+        	
         ComposizioneBean composition = new ComposizioneBean(lastOrderId, bean.getIsbn(), quantita);
         composizioneModelDm.doSave(composition);
+        
+        request.getRequestDispatcher("/OrderPage.jsp").forward(request, response);
       }
       
-      OrdineBean nuovoOrdine = new OrdineBean(
-          java.time.LocalDate.now().toString(), 
-          lastOrderId, 
-          (String) request.getSession().getAttribute("indirizzo"), 
-          ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail(), 
-          false, 
-          totale);
-      
-      ordineModelDm.doSave(nuovoOrdine);
     } catch (SQLException e) {
       e.printStackTrace();
     }
+  }
+  
+  private void jout(Object obj) {
+    System.out.println(obj);
   }
   
   /**

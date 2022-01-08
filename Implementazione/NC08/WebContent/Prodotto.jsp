@@ -1,4 +1,4 @@
-<%@page import="Bean.ProdottoBean"%>
+<%@page import="Control.*, Model.*, Bean.*,java.net.*,java.text.*, java.util.*, java.sql.SQLException"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%
   ProdottoBean prodotto = (ProdottoBean) request.getAttribute("prodotto");
@@ -21,7 +21,7 @@
        	<h6><%= prodotto.getNomeCategoria() %></h6>
         <h5>Prezzo: € <%= prodotto.getPrezzo() %></h5><br>
         <% if (prodotto.getQuantitaStock() > 0 ) { %>
-        <form action="carrello" method="post">
+        <form action="CartControl" method="get">
             <label>Quantità:</label>
             <select name="aggNum" style="padding: 15px 25px; border: none; font-size: 14px;text-align: center">
                     <%
@@ -31,7 +31,27 @@
                     <%}%>
             </select>
             <input type="hidden" name="prodCode" value="<%= prodotto.getIsbn()%>"> &nbsp;
-            <button class="btn btn-outline-warning" type="submit">Aggiungi al carrello</button>
+            <input type="text" name="isbn" value="<%= prodotto.getIsbn()%>" hidden="true">
+            <%
+            	ArrayList<ProdottoBean> libri = (ArrayList<ProdottoBean>) session.getAttribute("carrello");
+            	boolean found=false;
+            	if(libri!=null)
+            	{
+            		for(int i=0;i<libri.size();i++)
+            		{
+            			if(prodotto.getIsbn().equals(libri.get(i).getIsbn()))
+            			{found=true;}
+            		}
+        		}
+            	
+            	if(session.getAttribute("loggedUser") != null)
+            	{
+            		if(!found)
+            		{%><button class="btn btn-outline-warning" type="submit">Aggiungi al carrello</button> <input type="hidden" name="action" value="add"><%}
+            		else{%><button class="btn btn-outline-warning" type="submit">Rimuovi dal carrello</button> <input type="hidden" name="action" value="delete"><%}
+            	}else{%><div class="btn btn-outline-warning">Loggati per aggiungerlo al carrello</div><%}
+            %>
+            
         </form>
         <% if(session.getAttribute("loggedUser") != null && session.getAttribute("role") == "admin" ){%> 
         <form action="AdminProxy" method="get">
