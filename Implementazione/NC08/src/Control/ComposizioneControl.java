@@ -45,52 +45,62 @@ public class ComposizioneControl extends HttpServlet {
     ArrayList<ProdottoBean> carrello =
         (ArrayList<ProdottoBean>) request.getSession().getAttribute("carrello");
     
-    ArrayList<OrdineBean> ordini;
+    float totale = 0;
+      
+    for (ProdottoBean bean : carrello) {
+      totale += bean.getPrezzo();
+    }
+    
+    salveProdottoProvvisorio(totale, request, ordineModelDm);
+    int lastId = getIdFromProvvisorio(ordineModelDm, request);
+    
     try {
-      ordini = ordineModelDm.doRetrieveAll(
-          ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail());
-      
-      int lastOrderId = -1;
-      if (ordini.size() > 0) {
-        lastOrderId = ordini.get(ordini.size() - 1).getIdOrdine();
-      }
-      lastOrderId += 1;
-      float totale = 0;
-      
       for (ProdottoBean bean : carrello) {
         int quantita = 0;
         for (ProdottoBean underBean : carrello) {
           if (underBean.getIsbn().equals(bean.getIsbn())) {
             quantita++;
-            totale += underBean.getPrezzo();
           }
-        }
-      
-        OrdineBean nuovoOrdine = new OrdineBean(
-            java.time.LocalDate.now().toString(), 
-            lastOrderId, 
-            "PROVVISORIO", 
-            ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail(), 
-            false, 
-            totale);
-      
-        ordineModelDm.doSave(nuovoOrdine);
-
-        if (ordini.size() == 0) {
-          ordini = ordineModelDm.doRetrieveAll(
-            ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail());
-          lastOrderId = ordini.get(ordini.size() - 1).getIdOrdine();
-        }
-        	
-        ComposizioneBean composition = new ComposizioneBean(lastOrderId, bean.getIsbn(), quantita);
+        }      
+        ComposizioneBean composition = new ComposizioneBean(lastId, bean.getIsbn(), quantita);
         composizioneModelDm.doSave(composition);
-        
-        request.getRequestDispatcher("/OrderPage.jsp").forward(request, response);
       }
+    } catch (Exception e) {
+      jout(e.getMessage());
+    }
+    
+    request.getRequestDispatcher("/OrderPage.jsp").forward(request, response);
+  }
+  
+  private void salveProdottoProvvisorio(float totale, HttpServletRequest request,
+      OrdineModelDm ordineModelDm) {
+    try {
+      OrdineBean ordineProvvisorio = new OrdineBean();
       
+      ordineProvvisorio.setData(java.time.LocalDate.now().toString());
+      ordineProvvisorio.setIndirizzo("INDIRIZZO");
+      ordineProvvisorio.setMail(
+            ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail());
+      ordineProvvisorio.setMetodoPagamento(false);
+      ordineProvvisorio.setTotale(totale);
+        
+      ordineModelDm.doSave(ordineProvvisorio);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
+  
+  private int getIdFromProvvisorio(OrdineModelDm ordineModelDm, HttpServletRequest request) {
+    try {
+      ArrayList<OrdineBean> ordiniDiMail = ordineModelDm.doRetrieveAll(
+          ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail());
+
+      return ordiniDiMail.get(ordiniDiMail.size() - 1).getIdOrdine(); 
     } catch (SQLException e) {
       e.printStackTrace();
     }
+    
+    return -1;
   }
   
   private void jout(Object obj) {

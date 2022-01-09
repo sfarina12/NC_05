@@ -137,6 +137,44 @@ public class OrdineModelDm {
   }
   
   /**
+   * Quando invocato, modificherà tutti i campi dell'ordine, dal database.
+   *
+   * @param bean - ordine da modificare
+   */
+  public synchronized boolean doUpdate(OrdineBean bean) throws SQLException {
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+  
+    String updateSql = "UPDATE ordine SET Data = ?, Totale = ?,"
+        + " Metodo_Pagamento = ?, Indirizzo = ?, utente_Mail = ? WHERE ID_Ordine = ?";
+    
+    int result = 0;
+    
+    try {
+      connection = new ConnectionSingleton().getInstance().getConnessione();
+      preparedStatement = connection.prepareStatement(updateSql);
+      preparedStatement.setString(1, bean.getData());
+      preparedStatement.setFloat(2, bean.getTotale());
+      preparedStatement.setInt(3, bean.isMetodoPagamento() ? 1 : 0);
+      preparedStatement.setString(4, bean.getIndirizzo());
+      preparedStatement.setString(5, bean.getMail());
+      preparedStatement.setInt(6, bean.getIdOrdine());
+      result = preparedStatement.executeUpdate();
+      connection.commit();
+        
+    } finally {
+      try {
+        if (preparedStatement != null) {
+          preparedStatement.close();
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    return (result != 0);
+  }
+  
+  /**
    * Quando invocato, rimuoverà un determinato ordine dal database.
    *
    * @param id - l'id dell'ordine da eliminare

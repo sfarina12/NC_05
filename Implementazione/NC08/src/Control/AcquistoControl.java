@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,37 +37,41 @@ public class AcquistoControl extends HttpServlet {
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws ServletException, IOException {
-    ArrayList<ProdottoBean> carrelloRedyForBuy =
-        (ArrayList<ProdottoBean>) request.getSession().getAttribute("carrello");
+      
+    OrdineBean lastordineProvvisorio = getProvvisorio(model, request);
     
-    OrdineBean ordine = new OrdineBean();
-    
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");  
-    LocalDateTime now = LocalDateTime.now();  
-    UtenteBean utente = (UtenteBean) request.getAttribute("loggedUser");
-    
-    float total = 0;
-    for (ProdottoBean a : carrelloRedyForBuy) {
-      total += a.getPrezzo();
-    }
-    
-    ordine.setData(dtf.format(now));
-    ordine.setIndirizzo(request.getAttribute("indirizzo").toString());
-    ordine.setMail(utente.getMail());
-    ordine.setMetodoPagamento(
-        request.getAttribute("metodPagamento").toString() == "1" ? true : false);
-    ordine.setTotale(total);
+    lastordineProvvisorio.setMetodoPagamento(
+        request.getParameter("metodPagamento").toString().equals("1") ? true : false);
+    lastordineProvvisorio.setIndirizzo(
+        "" + request.getParameter("via")
+        + request.getParameter("cap")
+        + request.getParameter("citta")
+    );
     
     try {
-      model.doSave(ordine);
+      model.doUpdate(lastordineProvvisorio);
     } catch (SQLException e) {
       e.printStackTrace();
     }
     
-    request.getSession().setAttribute("carrello", new ArrayList<ProdottoBean>());
-    response.sendRedirect("/CartPage.jsp");
+    request.getSession().setAttribute("carrello", null);
+    RequestDispatcher requestDispatcher = request.getRequestDispatcher("CartControl");
+    requestDispatcher.forward(request, response);
   }
 
+  private OrdineBean getProvvisorio(OrdineModelDm ordineModelDm, HttpServletRequest request) {
+    try {
+      ArrayList<OrdineBean> ordiniDiMail = ordineModelDm.doRetrieveAll(
+          ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail());
+
+      return ordiniDiMail.get(ordiniDiMail.size() - 1); 
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+   
+    return null;
+  }
+  
   protected void doPost(HttpServletRequest request, HttpServletResponse response) 
       throws ServletException, IOException {
     doGet(request, response);
