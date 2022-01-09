@@ -109,7 +109,7 @@ public class UtenteControl extends HttpServlet {
         }
         if (value == -1) {
           UtenteBean user = new UtenteBean();
-          
+         
           user.setNickname((String) request.getAttribute("usrNick"));
           user.setMail((String) request.getAttribute("usrMail"));
           user.setPassword((String) request.getAttribute("usrPass"));

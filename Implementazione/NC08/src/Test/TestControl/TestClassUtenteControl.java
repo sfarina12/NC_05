@@ -2,6 +2,7 @@ package Test.TestControl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 
 import java.io.IOException;
@@ -107,7 +108,7 @@ class TestClassUtenteControl {
   
 //TC_1.1_07
   @Test
-  void testTcUtenteRegistratoSuccess() throws IOException, ServletException {
+  void testTcUtenteRegistratoSuccess() throws IOException, ServletException, SQLException {
     System.out.println("Testing (UtenteControl) -> Utente registrato con successo..");
 
     request.setAttribute("usrMail", "uccello@dodo.it");
@@ -124,5 +125,52 @@ class TestClassUtenteControl {
             });
 
         assertEquals(oracolo, exception.getMessage());
+        UtenteModelDm dm = new UtenteModelDm();
+        dm.doDelete("uccello@dodo.it");
+  }
+  
+//TC_2.2_04
+  @Test
+  void testTcLoginNotSuccessEmail() throws IOException, ServletException {
+    System.out.println("Testing (UtenteControl) -> Utente Registrato sbaglia email..");
+
+    request.setAttribute("usrMail", "asia@dodo");
+    request.setAttribute("usrPass", "111");
+    request.setAttribute("registerOrNot", "N");
+    request.setAttribute("logout", "N");
+    request.setAttribute("usrNick", "aaaa");
+    
+    servlet.doGet(request, response);
+    
+    assertNull(request.getSession().getAttribute("loggedUser"));
+  }
+  
+//TC_TC_2.2_06
+  @Test
+  void testTcLoginSuccess() throws IOException, ServletException {
+    System.out.println("Testing (UtenteControl) -> Utente Registrato logga..");
+
+    request.setAttribute("usrMail", "asia@dodo.it");
+    request.setAttribute("usrPass", "password");
+    request.setAttribute("registerOrNot", "N");
+    request.setAttribute("logout", "N");
+    request.setAttribute("usrNick", "Asietta");
+    
+              servlet.doGet(request, response);
+
+    assertEquals("asia@dodo.it", ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail());
+  }
+  
+  @Test
+  void testLogout() throws IOException, ServletException {
+    System.out.println("Testing (UtenteControl) -> Utente Registrato che esegue il loguout..");
+
+    request.setAttribute("usrMail", "asia@dodo.it");
+    request.setAttribute("usrPass", "password");
+    request.setAttribute("registerOrNot", "Y");
+    request.setAttribute("logout", "Y");
+    request.setAttribute("usrNick", "Asietta");
+    
+    assertNull(request.getSession().getAttribute("loggedUser"));    
   }
 }

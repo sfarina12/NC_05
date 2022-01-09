@@ -18,12 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminControl extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private final ProdottoModelDm prodottoModelDm = new ProdottoModelDm();
+  private final String DB_ERR = "Errore, riprovare";
   
   public AdminControl() {
     super();
   }
 
-  protected void doGet(HttpServletRequest request,
+  public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
     String action = (String) request.getAttribute("action");
     
@@ -33,6 +34,7 @@ public class AdminControl extends HttpServlet {
         prodottoModelDm.doDelete(isbn);
         response.sendRedirect(request.getContextPath() + "/ShopControl");
       } else if (action.equals("add")) {
+    	  ProdottoBean bean = new ProdottoBean();
         String isbn = (String) request.getAttribute("isbn");
         String titolo = (String) request.getAttribute("titolo");
         String autore = (String) request.getAttribute("autore");
@@ -42,7 +44,6 @@ public class AdminControl extends HttpServlet {
         int quantitaStock = Integer.parseInt((String) request.getAttribute("quantitaStock"));
         byte[] file = (byte[]) request.getAttribute("file");
 
-        ProdottoBean bean = new ProdottoBean();
         bean.setIsbn(isbn);
         bean.setAutore(autore);
         bean.setDescrizione(descrizione);
@@ -52,12 +53,14 @@ public class AdminControl extends HttpServlet {
         bean.setQuantitaStock(quantitaStock);
         bean.setCopertina(file);
 
-        prodottoModelDm.doSave(bean);
-        response.sendRedirect(request.getContextPath() + "/ShopControl");
+         prodottoModelDm.doSave(bean);
+         response.sendRedirect(request.getContextPath() + "/ShopControl");
+         
       } else {
         throw new Exception("azione sconosciuta");
       }
     } catch (Exception e) {
+    	request.setAttribute("errore", DB_ERR);
       e.printStackTrace();
     }
   }

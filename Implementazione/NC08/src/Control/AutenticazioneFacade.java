@@ -17,11 +17,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Simone Farina
  */
-@WebServlet("/AutenticazioneFacade")
+@WebServlet(name = "AutenticazioneFacade", value = "/AutenticazioneFacade")
 public class AutenticazioneFacade extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+  public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws ServletException, IOException {
   
     try {  

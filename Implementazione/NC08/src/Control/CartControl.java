@@ -28,21 +28,22 @@ public class CartControl extends HttpServlet {
     super();
   }
 
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+
     prodottoDm = new ProdottoModelDm();
     session = request.getSession();
     String pageToForward = "CartPage.jsp";
     
     ArrayList<ProdottoBean> carrello =
         (ArrayList<ProdottoBean>) session.getAttribute("carrello");
-
+    
     if (carrello == null) {
       carrello = new ArrayList<ProdottoBean>();
     } 
-    
+
     String action = request.getParameter("action");
-    
+ 
     if (action != null) {
       switch (action) {
         case "add":
@@ -67,15 +68,15 @@ public class CartControl extends HttpServlet {
         case "delete":
           try {
             String isbn = request.getParameter("isbn");
-            boolean stop = false;
             
+            boolean stop = false;
             for (int i = 0; i < carrello.size() && !stop; i++) {
               if (isbn.equals(carrello.get(i).getIsbn())) {
                 carrello.remove(i);
                 stop = true;
               }
             }
-          
+            
             ProdottoBean bean;
             bean = prodottoDm.doRetrieveByKey(isbn);
             request.setAttribute("prodotto", bean);
