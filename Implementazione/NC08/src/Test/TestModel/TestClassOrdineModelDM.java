@@ -56,7 +56,7 @@ class TestClassOrdineModelDm {
     ordineModel.doSave(nonInLista);
     lista = ordineModel.doRetrieveAll("asia@dodo.it");
     
-    assertEquals(2, lista.size());
+    assertEquals(2, lista.size()-1);
     ordineModel.doDelete(orderPlus.getIdOrdine());
     ordineModel.doDelete(nonInLista.getIdOrdine());
   }

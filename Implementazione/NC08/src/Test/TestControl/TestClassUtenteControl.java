@@ -22,6 +22,11 @@ import Bean.UtenteBean;
 import Control.UtenteControl;
 import Model.UtenteModelDm;
 
+/**
+ * Classe Test per UtenteControl.java.
+ *
+ *@author Alfonso Cuomo
+ */
 class TestClassUtenteControl {
 
   private UtenteControl servlet;
@@ -106,7 +111,7 @@ class TestClassUtenteControl {
     assertEquals(oracolo, exception.getMessage());
   }
   
-//TC_1.1_07
+  //TC_1.1_07
   @Test
   void testTcUtenteRegistratoSuccess() throws IOException, ServletException, SQLException {
     System.out.println("Testing (UtenteControl) -> Utente registrato con successo..");
@@ -124,12 +129,12 @@ class TestClassUtenteControl {
               servlet.doGet(request, response);
             });
 
-        assertEquals(oracolo, exception.getMessage());
-        UtenteModelDm dm = new UtenteModelDm();
-        dm.doDelete("uccello@dodo.it");
+    assertEquals(oracolo, exception.getMessage());
+    UtenteModelDm dm = new UtenteModelDm();
+    dm.doDelete("uccello@dodo.it");
   }
   
-//TC_2.2_04
+  //TC_2.2_04
   @Test
   void testTcLoginNotSuccessEmail() throws IOException, ServletException {
     System.out.println("Testing (UtenteControl) -> Utente Registrato sbaglia email..");
@@ -145,7 +150,7 @@ class TestClassUtenteControl {
     assertNull(request.getSession().getAttribute("loggedUser"));
   }
   
-//TC_TC_2.2_06
+  //TC_TC_2.2_06
   @Test
   void testTcLoginSuccess() throws IOException, ServletException {
     System.out.println("Testing (UtenteControl) -> Utente Registrato logga..");
@@ -156,9 +161,10 @@ class TestClassUtenteControl {
     request.setAttribute("logout", "N");
     request.setAttribute("usrNick", "Asietta");
     
-              servlet.doGet(request, response);
+    servlet.doGet(request, response);
 
-    assertEquals("asia@dodo.it", ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail());
+    assertEquals("asia@dodo.it", 
+        ((UtenteBean) request.getSession().getAttribute("loggedUser")).getMail());
   }
   
   @Test

@@ -22,42 +22,93 @@ import org.springframework.test.annotation.Rollback;
 
 import Control.AutenticazioneFacade;
 
+/**
+ * Classe Test per AutenticazioneFacade.java.
+ *
+ *@author Alfonso Cuomo
+ */
 class TestClassAutenticazioneFacade {
 	
-	private AutenticazioneFacade servlet;
-	private MockHttpServletRequest request;
-	private MockHttpServletResponse response;
-	//private MockHttpSession session;
+  private AutenticazioneFacade servlet;
+  private MockHttpServletRequest request;
+  private MockHttpServletResponse response;
 
-	@BeforeEach
-	  public void setUp() throws SQLException, ParseException {
-	    servlet = new AutenticazioneFacade();
-	    request = new MockHttpServletRequest();
-	    response = new MockHttpServletResponse();
-	   // request.setSession(session);
-	  }
+  @BeforeEach
+  public void setUp() throws SQLException, ParseException {
+    servlet = new AutenticazioneFacade();
+    request = new MockHttpServletRequest();
+    response = new MockHttpServletResponse();
+  }
 	
-	@BeforeEach
-	  public void oneWaySetup() throws ServletException {
-	    ServletConfig sg = new MockServletConfig();
-	    servlet.init(sg);
-}
-	
-	@Test
-	  @Rollback
-	  void redirectUtenteControlTest() throws ServletException, IOException, SQLException,
-	      ParseException {
+  @BeforeEach
+  public void oneWaySetup() throws ServletException {
+    ServletConfig sg = new MockServletConfig();
+    servlet.init(sg);
+  }
 
-	    request.addParameter("action", "user");
-	    request.addParameter("usrMail" ,"mail@dodo.it");
-        request.addParameter("usrPass", "password123");
-        request.addParameter("registerOrNot", "Y");
-        request.addParameter("logout", "N");
-        request.addParameter("usrNick", "francesca123");
+  @Test
+  @Rollback
+  void redirectUtenteControlTest() 
+      throws ServletException, IOException, SQLException, ParseException {
+    System.out.println("Testing (Autenticazione Facade) redirect in UtenteControl...");
 
-	    servlet.doGet(request, response);
-	    assertEquals("/UtenteControl" , response.getForwardedUrl());
+    request.addParameter("action", "user");
+    request.addParameter("usrMail", "mail@dodo.it");
+    request.addParameter("usrPass", "password123");
+    request.addParameter("registerOrNot", "Y");
+    request.addParameter("logout", "N");
+    request.addParameter("usrNick", "francesca123");
 
-	}
+    servlet.doGet(request, response);
+    assertEquals("/UtenteControl", response.getForwardedUrl());
+  }
 
+  @Test
+  @Rollback
+  void redirectShopControl() 
+      throws ServletException, IOException, SQLException, ParseException {
+    System.out.println("Testing (Autenticazione Facade) redirect in ShopControl...");
+
+    request.setParameter("action", "shop");
+
+    servlet.doGet(request, response);
+    assertEquals("/ShopControl", response.getRedirectedUrl());
+  }
+  
+  @Test
+  @Rollback
+  void redirectCartControl() 
+      throws ServletException, IOException, SQLException, ParseException {
+    System.out.println("Testing (Autenticazione Facade) redirect in CartControl...");
+
+    request.setParameter("action", "cart");
+
+    servlet.doGet(request, response);
+    assertEquals("/CartControl", response.getRedirectedUrl());
+  }
+  
+  @Test
+  @Rollback
+  void redirectHomeControl() 
+      throws ServletException, IOException, SQLException, ParseException {
+    System.out.println("Testing (Autenticazione Facade) redirect in HomeControl...");
+
+    request.setParameter("action", "home");
+
+    servlet.doGet(request, response);
+    assertEquals("/HomeControl", response.getRedirectedUrl());
+  }
+  
+  @Test
+  @Rollback
+  void redirectProdottoControl() 
+      throws ServletException, IOException, SQLException, ParseException {
+    System.out.println("Testing (Autenticazione Facade) redirect in ProdottoControl...");
+
+    request.setParameter("action", "prodotto");
+    request.setParameter("isbn", "1234567891234");
+    
+    servlet.doGet(request, response);
+    assertEquals("/Prodotto", response.getForwardedUrl());
+  }
 }
