@@ -1,0 +1,40 @@
+@charset "ISO-8859-1";
+
+#generalMessage
+{
+	position:fixed;
+	bottom:50px;
+	right: 50px;
+	height:180px;
+	width:520px;
+	background-color: #FFCA2C;
+	overflow: hidden;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	z-index:99;
+}
+
+#generalMessage nome
+{
+	position:absolute;
+	font-size:35px;
+	color: white;
+	left:15px;
+	top:10px;
+}
+
+#generalMessage text
+{
+	position:absolute;
+	left: 15px;
+	top:60px;
+	width: 90%;
+	color: white;
+	font-size:20px;
+}
+
+#generalMessage img
+{
+	position:absolute;
+	right: 15px;
+	top:10px;
+}
