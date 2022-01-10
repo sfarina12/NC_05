@@ -47,15 +47,15 @@
             	if(session.getAttribute("loggedUser") != null)
             	{
             		if(!found)
-            		{%><button class="btn btn-outline-warning" type="submit">Aggiungi al carrello</button> <input type="hidden" name="action" value="add"><%}
-            		else{%><button class="btn btn-outline-warning" type="submit">Rimuovi dal carrello</button> <input type="hidden" name="action" value="delete"><%}
+            		{%><button class="btn btn-outline-warning" nome="AddToCartButton" type="submit">Aggiungi al carrello</button> <input type="hidden" name="action" value="add"><%}
+            		else{%><button class="btn btn-outline-warning" nome="RemoveFromCartButton" type="submit">Rimuovi dal carrello</button> <input type="hidden" name="action" value="delete"><%}
             	}else{%><div class="btn btn-outline-warning">Loggati per aggiungerlo al carrello</div><%}
             %>
             
         </form>
         <% if(session.getAttribute("loggedUser") != null && session.getAttribute("role") == "admin" ){%> 
         <form action="AdminProxy" method="get">
-			<input type="submit" class="btn btn-warning mt-5 mb-5" value="Rimuovi libro" style="color:white;">
+			<input type="submit" class="btn btn-warning mt-5 mb-5" nome="RemoveProductButton" value="Rimuovi libro" style="color:white;">
 			
 			<input type="text" name="action" value="delete" hidden="true">
 			<input type="text" name="isbn" value="<%= prodotto.getIsbn()%>" hidden="true">

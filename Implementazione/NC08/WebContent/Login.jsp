@@ -7,7 +7,7 @@
 
 <div class="container mt-5">
 <h1 class="text-center">Login</h1>
-<form class="p-5" name="login" action="AutenticazioneFacade?action=user" method="post">
+<form class="p-5" nome="LoginForm" name="login" action="AutenticazioneFacade?action=user" method="post">
 	<div class="row pb-3">
 		<h3><label for="mail">Email</label></h3>
 		<input type="email" name="usrMail" id="mail" class="form-control">
@@ -21,7 +21,7 @@
     <input type="text" name="logout" value="N" hidden="true">
     
     <div class="text-center">
-       <button class="btn btn-warning" type="submit"><h3 style="color:white">Continua</h3></button>
+       <button class="btn btn-warning" nome="SendLoginButton" type="submit"><h3 style="color:white">Continua</h3></button>
     </div>	
     
     

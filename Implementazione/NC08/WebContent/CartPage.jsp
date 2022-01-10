@@ -19,7 +19,7 @@
   				}  
   			%><%=totale %></h2>
 			<button type="button" class="btn btn-warning mt-2 mb-5">
-				<a class="nav-link" href="ComposizioneControl" style="color:white;">Procedi all'acquisto</a>
+				<a class="nav-link" href="ComposizioneControl" nome="OrderButton" style="color:white;">Procedi all'acquisto</a>
 			</button>
   		</div>
   		<div class="row">

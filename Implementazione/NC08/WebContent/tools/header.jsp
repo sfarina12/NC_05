@@ -41,7 +41,7 @@
   		</li>
   	<%} else {%>
   		<li class="nav-item pt-2">
-   			<h3><a class="nav-link" href="AutenticazioneFacade?action=user&logout=Y">Logout</a></h3>
+   			<h3><a class="nav-link" nome="logout" href="AutenticazioneFacade?action=user&logout=Y">Logout</a></h3>
   		</li>
   	<%}%>
   <%

@@ -1,10 +1,8 @@
 package Control;
 
 import Bean.OrdineBean;
-import Bean.ProdottoBean;
 import Bean.UtenteBean;
 import Model.OrdineModelDm;
-import Model.UtenteModelDm;
 
 import java.io.IOException;
 import java.sql.SQLException;

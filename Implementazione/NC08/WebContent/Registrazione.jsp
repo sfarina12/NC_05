@@ -6,7 +6,7 @@
 </jsp:include>
 <div class="container mt-5">
 	<h1 class="text-center">Registrazione</h1>
-	<form class="p-5" name="registrazione" action="AutenticazioneFacade?action=user" method="post">
+	<form class="p-5" nome="RegistrationForm" name="registrazione" action="AutenticazioneFacade?action=user" method="post">
 		<div class="row pb-3">
 		<h3><label for="nickname">Nickname</label></h3>
 		<input type="text" name="usrNick" id="nickname" class="form-control">
@@ -22,7 +22,7 @@
 		<input type="text" name="registerOrNot" value="Y" hidden="true">
 	    <input type="text" name="logout" value="N" hidden="true">
 	    <div class="text-center">
-		<button class="btn btn-warning" type="submit"><h3 style="color:white">Registrati</h3></button>
+		<button class="btn btn-warning" nome="SendRegistrationButton" type="submit"><h3 style="color:white">Registrati</h3></button>
 		</div>
 	</form>
 </div>

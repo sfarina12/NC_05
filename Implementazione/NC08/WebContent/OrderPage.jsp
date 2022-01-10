@@ -8,7 +8,7 @@
 <body>
 <div class="container">
 <div class="row mt-5">
-	<form class="p-5" action="AcquistoControl" method="get">
+	<form class="p-5" action="AcquistoControl" nome1="DeliveryInfoForm" nome2="PaymentInfoForm" method="get">
 		<button type="submit" class="btn btn-warning mt-2 mb-5" style="margin-left:20px; color:white">Acquista</button>
     	<div class="col-5">
     		<div class="container">

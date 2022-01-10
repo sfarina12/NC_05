@@ -8,7 +8,7 @@
 <body>
 <div class="container">
 <div class="row mt-5">
-	<form class="p-5" action="AdminProxy" enctype="multipart/form-data" method="post">
+	<form class="p-5" action="AdminProxy" nome="AddProductForm" enctype="multipart/form-data" method="post">
     	<div class="col-7">
     		<div class="container">
     			<h2>Copertina<input class="file" type="file" name="file" value="" maxlength="255" style="margin-left:100px; width:370px"></h2>
@@ -31,7 +31,7 @@
         		<h2>ISBN<input name="isbn" type="text" style="margin-left:175px; width:370px"></h2>
         		<h2>Quantità stock<input name="quantitaStock" style="margin-left:35px; width:370px"></h2><br>
         		
-        		<input class="btn btn-warning mt-5 mb-5" type="submit" value="Aggiungi il nuovo prodotto" style="margin-left:160px; width:370px">
+        		<input class="btn btn-warning mt-5 mb-5" type="submit" nome="SendAddProductButton" value="Aggiungi il nuovo prodotto" style="margin-left:160px; width:370px">
         		
         		<input type="text" name="action" value="add" hidden="true">
     		</div>    

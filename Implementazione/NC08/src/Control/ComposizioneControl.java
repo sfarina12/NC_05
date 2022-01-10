@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet che permette di creare gli ordini partendo dai prodotti presenti 
- * all'interno del carrello carrello.
+ * all'interno del carrello.
  *
  * @author Farina Simone
  */
