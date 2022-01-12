@@ -41,5 +41,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/objenesis-1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-core-5.3.14.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-test-5.3.14.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/spring-web-5.3.14.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

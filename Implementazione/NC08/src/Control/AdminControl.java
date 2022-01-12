@@ -53,14 +53,14 @@ public class AdminControl extends HttpServlet {
         bean.setQuantitaStock(quantitaStock);
         bean.setCopertina(file);
 
-         prodottoModelDm.doSave(bean);
-         response.sendRedirect(request.getContextPath() + "/ShopControl");
+        prodottoModelDm.doSave(bean);
+        response.sendRedirect(request.getContextPath() + "/ShopControl");
          
       } else {
         throw new Exception("azione sconosciuta");
       }
     } catch (Exception e) {
-    	request.setAttribute("errore", DB_ERR);
+      request.setAttribute("errore", DB_ERR);
       e.printStackTrace();
     }
   }

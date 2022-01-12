@@ -40,7 +40,7 @@ public class ComposizioneControl extends HttpServlet {
    *
    * @param request responce
    */
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     ArrayList<ProdottoBean> carrello =
         (ArrayList<ProdottoBean>) request.getSession().getAttribute("carrello");

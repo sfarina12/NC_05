@@ -56,7 +56,7 @@ class TestClassOrdineModelDm {
     ordineModel.doSave(nonInLista);
     lista = ordineModel.doRetrieveAll("asia@dodo.it");
     
-    assertEquals(2, lista.size()-1);
+    assertEquals(6, lista.size()-1);
     ordineModel.doDelete(orderPlus.getIdOrdine());
     ordineModel.doDelete(nonInLista.getIdOrdine());
   }
@@ -65,7 +65,7 @@ class TestClassOrdineModelDm {
     void testDoSave() throws SQLException {
     System.out.println("Testing :ORDINE: DoSave()");
     
-    OrdineBean order2 = new OrdineBean("1-1-1", 2, 
+    OrdineBean order2 = new OrdineBean("10-12-12", 6, 
             "indirizzo", "asia@dodo.it", true, 10f);
     int i = ordineModel.doSave(order2);
     

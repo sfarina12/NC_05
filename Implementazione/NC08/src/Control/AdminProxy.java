@@ -24,12 +24,13 @@ import javax.servlet.http.Part;
     maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 50)
 public class AdminProxy extends HttpServlet {
   private static final long serialVersionUID = 1L;
+  private final String DB_ERR = "Errore, riprovare";
        
   public AdminProxy() {
     super();
   }
 
-  protected void doGet(HttpServletRequest request,
+  public void doGet(HttpServletRequest request,
       HttpServletResponse response) throws ServletException, IOException {
 
     try {
@@ -37,10 +38,9 @@ public class AdminProxy extends HttpServlet {
 
       if (session.getAttribute("role") == null
           || ((String) session.getAttribute("role")).equals("normal")) {
-        throw new Exception("Accesso negato");
+        throw new IllegalArgumentException("Accesso negato");
       } else {
         String action = request.getParameter("action");
-
         if (action.equals("delete")) {
           String isbn = request.getParameter("isbn");
           request.setAttribute("isbn", isbn);
@@ -90,6 +90,7 @@ public class AdminProxy extends HttpServlet {
         }
       }
     } catch (Exception e) {
+    	request.setAttribute("errore", DB_ERR);
       e.printStackTrace();
     }
   }
