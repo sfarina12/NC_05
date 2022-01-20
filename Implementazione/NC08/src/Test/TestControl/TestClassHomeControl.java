@@ -12,28 +12,30 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockServletConfig;
 
-import Control.ImageControl;
+import Control.AdminControl;
+import Control.HomeControl;
 
-//Classe Di Test Non Specificata nel TCS
 /**
-* Classe Test per ImageControl.java.
-*
-*@author Alfonso Cuomo
-*/
-class TestClassImageControl {
+ * Classe Test per HomeControl.java.
+ *
+ *@author Alfonso Cuomo
+ */
+class TestClassHomeControl {
 
-  private ImageControl servlet;
+  private HomeControl servlet;
   private MockHttpServletRequest request;
   private MockHttpServletResponse response;
+  private MockHttpSession session;
 
   @BeforeEach
   void setUp() throws Exception {
-
-   servlet = new ImageControl();
-   request = new MockHttpServletRequest();
-   response = new MockHttpServletResponse();
+    servlet = new HomeControl();
+    request = new MockHttpServletRequest();
+    response = new MockHttpServletResponse();
+    request.setSession(session);
   }
 
   @BeforeEach
@@ -43,12 +45,11 @@ class TestClassImageControl {
   }
 
   @Test
-  public void TestImageControl() throws ServletException, IOException {
-    System.out.println("Testing (ImageControl)..");
-
-    request.addParameter("isbn", "9788232452222");  
-    servlet.doGet(request, response);
-    assertEquals("image/jpg", response.getContentType());
+  void testHomeControl() throws ServletException, IOException {
+    System.out.println("Testing (TestControl) di HomeControl");
+    
+    servlet.doPost(request, response);
+    assertEquals("/HomePage.jsp", response.getForwardedUrl());        
   }
 
 }

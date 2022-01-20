@@ -33,7 +33,7 @@ public class AcquistoControl extends HttpServlet {
     model =  new OrdineModelDm();
   }
 
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+  public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws ServletException, IOException {
       
     OrdineBean lastordineProvvisorio = getProvvisorio(model, request);

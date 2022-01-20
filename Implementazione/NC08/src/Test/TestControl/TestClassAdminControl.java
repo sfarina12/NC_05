@@ -104,7 +104,7 @@ class TestClassAdminControl {
     request.setAttribute("errore", "positivo");
 	
     servlet.doGet(request, response);
-        
+    
     assertEquals(oracolo, request.getAttribute("errore"));
   }
 

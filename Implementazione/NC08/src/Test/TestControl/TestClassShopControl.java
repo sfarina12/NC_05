@@ -48,7 +48,7 @@ class TestClassShopControl {
     System.out.println("Testing (ShopControl)..");
 
 	  servlet.doGet(request, response);
-	  assertEquals("/ShopPage.jsp;", response.getForwardedUrl());
+	  assertEquals("/ShopPage.jsp", response.getForwardedUrl());
   }
 
 }
