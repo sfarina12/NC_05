@@ -27,7 +27,7 @@ import Model.ProdottoModelDm;
 class TestClassComposizioneModelDm {
 
   ProdottoModelDm prodottoModel;
-  ProdottoBean prodotto = new ProdottoBean("isbn", "titolo", 
+  ProdottoBean prodotto = new ProdottoBean("isbn1", "titolo", 
             "autore", 10f, null, "descrizione", "categoria", 10);
   OrdineModelDm ordineModel;
   OrdineBean order = new OrdineBean("0000-00-00", 1, 
