@@ -1,7 +1,7 @@
 /**
  * La funzione descritta permette l'inizializzazione di uno slider secondo la documentazione della componente off-the-shelf 'slick'
  * 
- * @author Grazia Margarella
+ * @author Simone Farina
  */
 $(document).ready(function(){
     $('.new-books-container').slick({
